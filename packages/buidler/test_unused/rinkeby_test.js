@@ -59,49 +59,48 @@ describe("Rinkeby Deploy and Test", function () {
       gasLimit: ethers.BigNumber.from("9500000"),
     };
 
-    //deploy escrow
-    // await HolderFactory.connect(owner).deployNewHolder(
-    //   "AgriTest",
+    // deploy escrow
+    // const escrow = await HolderFactory.connect(owner).deployNewHolder(
+    //   "Honduras Agriculture Project",
     //   "0x36bede640D19981A82090519bC1626249984c908", //CT address on rinkeby
-      // Dai.address,
-      // owner.getAddress(),
-      // bidder.getAddress(),
-      // auditor.getAddress(),
-      // [ethers.BigNumber.from("300"),ethers.BigNumber.from("600"),ethers.BigNumber.from("900")],
-      // [ethers.BigNumber.from("3"),ethers.BigNumber.from("6"),ethers.BigNumber.from("9")],
-      // overrides
+    //   Dai.address,
+    //   owner.getAddress(),
+    //   owner.getAddress(),
+    //   owner.getAddress(),
+    //   ethers.BigNumber.from("300"),
+    //   ethers.BigNumber.from("3"),
+    //   overrides
     // );
+    // console.log(escrow)
 
-    const escrow = new ethers.Contract("0x32530d25E0448E7B0da28B80a778613f8A02adB6", abiHolderC, provider);
-    console.log("(old) First Escrow: ", escrow.address)
+    const escrow = await HolderFactory.connect(owner).getHolder("Honduras Agriculture Project");
+    const firstescrow = new ethers.Contract(escrow.projectAddress, abiHolderC, provider);
+    console.log("First Escrow: ", firstescrow.address)
 
-    // // //deploy project
-    // // await TokenFactory.connect(owner).deployNewProject(
-    // //   "AgriTest",
-    // //   "AT",
-    // //   "linkhere",
-    // //   Dai.address,
-    // //   owner.getAddress(),
-    // //   bidder.getAddress(),
-    // //   auditor.getAddress(),
-    // //   overrides
-    // // );
+    //deploy project
+    // const project = await TokenFactory.connect(owner).deployNewProject(
+    //   "Honduras Agriculture Project",
+    //   "HAP",
+    //   "linkhere",
+    //   Dai.address,
+    //   owner.getAddress(),
+    //   owner.getAddress(),
+    //   owner.getAddress(),
+    //   overrides
+    // );
+    // console.log(project)
+    const project = await TokenFactory.connect(owner).getProject("Honduras Agriculture Project");
+    const firstproject = new ethers.Contract(project.projectAddress, abiToken, provider);
+    console.log("First Token/Project: ", firstproject.address)
 
-    const project = new ethers.Contract("0xE6a9cf47cA7e6692a6c27EB0D59e857C5b160E86", abiToken, provider);
-    console.log("(old) First Token/Project: ", project.address)
-    await project.connect(owner).setHolder(
-    escrow.projectAddress);
+    await firstproject.connect(owner).setHolder(
+      firstescrow.address);
 
     CT = new ethers.Contract("0x36bede640D19981A82090519bC1626249984c908",abiCT,provider)
     console.log("CT address: ", CT.address);
-
-    const getProject = await TokenFactory.connect(owner).getProject("AgriTest");
-    console.log(getProject);
   });
 
   xit("test buyone()", async function () {
-    const [bidder, auditor] = await ethers.getSigners(); //jsonrpc signers from default 20 accounts with 10000 ETH each
-    
     const firstEscrow = new ethers.Contract("0x32530d25E0448E7B0da28B80a778613f8A02adB6", abiHolderC, provider);
     const firstProjectContract = new ethers.Contract("0xE6a9cf47cA7e6692a6c27EB0D59e857C5b160E86", abiToken, provider);
     
@@ -144,27 +143,6 @@ describe("Rinkeby Deploy and Test", function () {
     //     .connect(owner)
     //     .ownerOf(ethers.BigNumber.from("0"))
     // );
-
-    //give bidder and auditor some money for gas
-    // tx = {
-    //   to: bidder.getAddress(),
-    //   value: ethers.utils.parseEther("1.0"),
-    // };
-    // await owner.signTransaction(tx);
-    // await owner.sendTransaction(tx);
-
-    const balance_bidder = await bidder.getBalance();
-    console.log("eth held in wei by bidder: ", balance_bidder.toString());
-
-    // tx = {
-    //   to: auditor.getAddress(),
-    //   value: ethers.utils.parseEther("1.0"),
-    // };
-    // await owner.signTransaction(tx);
-    // await owner.sendTransaction(tx);
-
-    const balance_auditor = await auditor.getBalance();
-    console.log("eth held in wei by auditor: ", balance_auditor.toString());
   });
    
   xit("run through Gnosis conditional token and audit report as oracle", async function () {

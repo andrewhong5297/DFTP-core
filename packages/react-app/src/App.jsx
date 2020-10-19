@@ -95,7 +95,7 @@ function App() {
   //not part of scaffold-eth
   //theGraph
   const { loading, gqlerror, data } = useQuery(GET_FUNDERS);
-  const [ funderList, setList ] = useState("no funders yet")
+  const [ funderList, setList ] = useState("No funders yet, be the first one!")
   const queryResult = () => {
     if (loading) console.log("loading")
     if (gqlerror) console.log("error")
