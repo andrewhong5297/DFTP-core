@@ -10,7 +10,8 @@
 # 💡 Lucidity
 
 ### Management of Funds for Projects/Contracts/Services for Private/Public Organizations the MVP is a DAPP that will evolve in a Protocol 
-test localhost site here: http://lucidity-eth.surge.sh/
+Localhost site here: http://lucidity-eth.surge.sh/
+Rinkeby site here: lucidity-eth-R.surge.sh
 
 ## Proposal of MVP
 
