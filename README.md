@@ -59,9 +59,7 @@ yarn deploy
 # Technologies Used
 
 ## Solidity
-## CTokens
+## Gnosis CTokens
 ## The Graph API
-## Matic
-## ENS
-## USDC
+## OpenLaw
 
