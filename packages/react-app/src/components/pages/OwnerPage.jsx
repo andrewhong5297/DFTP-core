@@ -10,11 +10,14 @@ export const OwnerPage = (props) => {
         budgets = await props.firstEscrow.budgetsOne()
         timeline = await props.firstEscrow.timelineOne()
 
-        setText(<div>
-            Project Name: {projectName}
-            Milestone One Budget: {budgets.toString()}
-            Timeline for Milestone One (months): {timeline.toString()}
-        </div>)
+        setText(
+            <div>
+                <div>Project Name: {projectName}</div>
+                <div>Milestone One Budget: {budgets.toString()}</div>
+                <div>Timeline for Milestone One (months): {timeline.toString()}</div>
+            </div>
+        )
+            
     }
 
     useEffect(() => {

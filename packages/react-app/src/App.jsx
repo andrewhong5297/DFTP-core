@@ -100,7 +100,7 @@ function App() {
     if (loading) console.log("loading")
     if (gqlerror) console.log("error")
     else {
-      console.log(data["fundingTokens"][0]) //make this a mapping? 
+      console.log(data) //make this a mapping? 
       
         //https://www.apollographql.com/docs/react/get-started/
         setList(data.fundingTokens.map(({ id, fundingvalue, tenor}) => (
@@ -269,10 +269,10 @@ function App() {
                 <Row className="mt-1">
                     <Col>
                     <Card>
-                      <div>
-                        <h5>Welcome, please select a role in the dropdown to get started. This can be changed anytime.</h5>
-                          <Dropdown onSelect={handleSelect} size="sm">
-                            <Dropdown.Toggle variant="success" id="dropdown-basic" size="sm">
+                      <div className="cardDiv">
+                        <h5>Welcome, please select a role in the dropdown to get started.<br /> This can be changed anytime.</h5>
+                          <Dropdown onSelect={handleSelect}>
+                            <Dropdown.Toggle variant="primary" id="dropdown-basic" size="md">
                               Roles
                             </Dropdown.Toggle>
 
@@ -286,21 +286,31 @@ function App() {
                       </div>
                       </Card>
                       <Card className="mt-1">
+                      <div className="cardDiv">
                       <h6 classname="mt-1">Please {link} for new projects, otherwise search for project name below:</h6>
-                        <form onSubmit={handleSubmit(updateContracts)}>
-                          <label>
-                            <input type="text" name="value" ref={register} />
-                          </label>
-                          <input type="submit" value="Submit" />
+                        <form onSubmit={handleSubmit(updateContracts)} className="">
+                          <div className="input-group mb-3">
+                                <div className="input-group-append col-centered">
+                                  <label>
+                                  <input type="text" name="value" ref={register} className="form-control" placeholder="" aria-describedby="button-addon2" />
+                                  </label>
+                                  <div><button className="btn col-centeredbtn btn-outline-secondary" type="submit" value="submit" id="button-addon2">Submit</button></div>
+                                  
+                                </div>
+                              </div>
                         </form>
                         {error}
                         {PageState}
+                        </div>
                       </Card>
                       <Card className="mt-1">
-                        <div><h6>List of all funders for selected project:</h6>
-                        <Button onClick = {queryResult} size="sm">Update Funders List</Button></div>
+                    <div className="cardDiv"><h6>List of all funders for selected project:</h6>
+                        <Button onClick = {queryResult} size="sm">Update Funders List</Button>
+                        <div>
+                          {funderList}
+                        </div>
                         
-                        {funderList}
+                        </div>
                       </Card>
                   </Col>
                 </Row>
