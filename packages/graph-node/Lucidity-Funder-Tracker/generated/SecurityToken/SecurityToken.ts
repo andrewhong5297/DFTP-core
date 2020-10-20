@@ -179,16 +179,20 @@ export class newFunder__Params {
     this._event = event;
   }
 
+  get tokenId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
   get funder(): Address {
-    return this._event.parameters[0].value.toAddress();
+    return this._event.parameters[1].value.toAddress();
   }
 
   get value(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
+    return this._event.parameters[2].value.toBigInt();
   }
 
   get tenor(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
+    return this._event.parameters[3].value.toBigInt();
   }
 }
 
@@ -852,20 +856,16 @@ export class ConstructorCall__Inputs {
     return this._call.inputValues[3].value.toAddress();
   }
 
-  get _holder(): Address {
+  get projectOwner(): Address {
     return this._call.inputValues[4].value.toAddress();
   }
 
-  get projectOwner(): Address {
+  get projectBidder(): Address {
     return this._call.inputValues[5].value.toAddress();
   }
 
-  get projectBidder(): Address {
-    return this._call.inputValues[6].value.toAddress();
-  }
-
   get auditors(): Address {
-    return this._call.inputValues[7].value.toAddress();
+    return this._call.inputValues[6].value.toAddress();
   }
 }
 
@@ -1157,6 +1157,36 @@ export class SetApprovalForAllCall__Outputs {
   _call: SetApprovalForAllCall;
 
   constructor(call: SetApprovalForAllCall) {
+    this._call = call;
+  }
+}
+
+export class SetHolderCall extends ethereum.Call {
+  get inputs(): SetHolderCall__Inputs {
+    return new SetHolderCall__Inputs(this);
+  }
+
+  get outputs(): SetHolderCall__Outputs {
+    return new SetHolderCall__Outputs(this);
+  }
+}
+
+export class SetHolderCall__Inputs {
+  _call: SetHolderCall;
+
+  constructor(call: SetHolderCall) {
+    this._call = call;
+  }
+
+  get _holder(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class SetHolderCall__Outputs {
+  _call: SetHolderCall;
+
+  constructor(call: SetHolderCall) {
     this._call = call;
   }
 }

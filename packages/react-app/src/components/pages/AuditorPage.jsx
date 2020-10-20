@@ -43,7 +43,7 @@ export const AuditorPage = (props) => {
         console.log(parseInt(milestone.toString()))
         console.log(parseInt(totalValueInEscrow.toString()))
 
-        if(parseInt(milestone.toString())>=parseInt(totalValueInEscrow.toString())){
+        if(parseInt(milestone.toString())>parseInt(totalValueInEscrow.toString())){
           throw("Not enough money error");
         }
 

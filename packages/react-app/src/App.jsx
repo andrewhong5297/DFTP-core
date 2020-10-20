@@ -100,11 +100,15 @@ function App() {
     if (loading) console.log("loading")
     if (gqlerror) console.log("error")
     else {
-      console.log(data) //make this a mapping? 
-      
+      console.log(data)
         //https://www.apollographql.com/docs/react/get-started/
-        setList(data.fundingTokens.map(({ id, fundingvalue, tenor}) => (
-          <div>Funder id: {id} Funded amount: {fundingvalue.toString()} dai Funded tenor: {tenor.toString()} years</div>
+        setList(data.fundingTokens.map(({ id, owner, fundingvalue, tenor}) => (
+        <div>
+          <div>Token id: {id}</div>
+          <div>Owner: {owner}</div> 
+          <div>Funded amount: {fundingvalue.toString()} dai</div>
+          <div>Funded tenor: {tenor.toString()} years</div>
+        </div>
         )))
     }
   }

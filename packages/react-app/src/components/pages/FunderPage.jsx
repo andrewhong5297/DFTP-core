@@ -20,28 +20,22 @@ export const FunderPage = (props) => {
         console.log("firstProjectContract: ", props.firstProjectContract.address)
         try {
             //funder approve, then call recieve from project
-            const transactionhere = await props.Dai.connect(owner).approve(
+            let transaction = await props.Dai.connect(owner).approve(
             props.firstProjectContract.address, //spender, called by owner
             ethers.BigNumber.from(formData.value.toString())
             );
             
-            
-            setStatus(
-                <Alert variant="success" onClose={() => setStatus(null)} dismissible>
-                    <TransactionPopUp />
-                </Alert>
-            )     
-
-            console.log(transactionhere.hash)
-            // const minedTxReceipt = await awaitTransactionMined.awaitTx(props.provider, transactionhere.hash); //doesn't work cause web3?
-            
-            setStatus(null) //close when finished?
+            let TxReceipt = await props.provider.getTransactionReceipt(transaction.hash)
+            console.log(TxReceipt)
 
             //buy and mint first funding token
-            await props.firstProjectContract.connect(owner).buyOne(
+            transaction = await props.firstProjectContract.connect(owner).buyOne(
             ethers.BigNumber.from(formData.value.toString()), //funded value dai
             ethers.BigNumber.from(formData.year.toString()) // tenor
             );
+
+            TxReceipt = await props.provider.getTransactionReceipt(transaction.hash)
+            console.log(TxReceipt)
 
             //recieve the funding into the holder
             await props.firstEscrow

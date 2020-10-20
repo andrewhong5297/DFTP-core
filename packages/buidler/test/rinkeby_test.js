@@ -19,12 +19,12 @@ function mnemonic() {
 describe("Rinkeby Deploy and Test", function () {
   let Dai, HolderFactory, TokenFactory, CT, provider, owner, overrides;
 
-  it("deploy first project and escrow", async function () {
-    
+  it("deploy factories", async function () {
+
     provider = new ethers.providers.InfuraProvider("rinkeby", {
       projectId: "d635ea6eddda4720824cc8b24380e4a9",
       projectSecret: "b4ea2b15f0614105a64f0e8ba1f2bffa"
-  });
+    });
 
     // This can be an address or an ENS name
     const address = "0xc7ad46e0b8a400bb3c915120d284aafba8fc4735"; //address dai
@@ -38,20 +38,23 @@ describe("Rinkeby Deploy and Test", function () {
 
     console.log("eth held in wei: ", balance_owner.toString());
     console.log("dai held: ", balancedai_owner.toString());
+
     // const TokenFactoryContract = await ethers.getContractFactory(
     //   "TokenFactory"
-    // ); //contract name here
+    // );
     // TokenFactory = await TokenFactoryContract.connect(owner).deploy();
-
-    TokenFactory = new ethers.Contract("0x7b5D3915bb88ca0E560F86f7aBB44b69946D2FB1", abiFactory, provider);
-    console.log("Token Factory: ", TokenFactory.address)
 
     // const HolderFactoryContract = await ethers.getContractFactory(
     //   "HolderFactory"
-    // ); //contract name here
+    // );
     // HolderFactory = await HolderFactoryContract.connect(owner).deploy();
+  });
+  
+  xit("deploy test project", async function () {    
+    TokenFactory = new ethers.Contract("0x0eFC99FAb24Bf6c352Bd94560be3d990CA83c85c", abiFactory, provider);
+    console.log("Token Factory: ", TokenFactory.address)
 
-    HolderFactory = new ethers.Contract("0xdd67Fff3e64522d7Fd3534EDD783B0CA6618b949", abiHolder, provider);
+    HolderFactory = new ethers.Contract("0x6e32B5b63f9AB084021a589AC6d2d64a1c5b6950", abiHolder, provider);
     console.log("Escrow Factory: ", HolderFactory.address)
 
     //https://docs.ethers.io/ethers.js/v5-beta/api-contract.html#overrides
@@ -60,39 +63,46 @@ describe("Rinkeby Deploy and Test", function () {
     };
 
     // deploy escrow
-    // const escrow = await HolderFactory.connect(owner).deployNewHolder(
-    //   "Honduras Agriculture Project",
-    //   "0x36bede640D19981A82090519bC1626249984c908", //CT address on rinkeby
-    //   Dai.address,
-    //   owner.getAddress(),
-    //   owner.getAddress(),
-    //   owner.getAddress(),
-    //   ethers.BigNumber.from("500"),
-    //   ethers.BigNumber.from("36"),
-    //   ethers.BigNumber.from("300"),
-    //   ethers.BigNumber.from("32"),
-    //   ethers.BigNumber.from("800"),
-    //   ethers.BigNumber.from("24"),
-    //   overrides
-    // );
-    // console.log(escrow)
+    const escrow = await HolderFactory.connect(owner).deployNewHolder(
+      "Honduras Agriculture Project",
+      "0x36bede640D19981A82090519bC1626249984c908", //CT address on rinkeby
+      Dai.address,
+      owner.getAddress(),
+      owner.getAddress(),
+      owner.getAddress(),
+      ethers.BigNumber.from("500"),
+      ethers.BigNumber.from("36"),
+      ethers.BigNumber.from("300"),
+      ethers.BigNumber.from("32"),
+      ethers.BigNumber.from("800"),
+      ethers.BigNumber.from("24"),
+      overrides
+    );
+    console.log(escrow)
+
+    // deploy project
+    const project = await TokenFactory.connect(owner).deployNewProject(
+      "Honduras Agriculture Project",
+      "HAP",
+      "linkhere",
+      Dai.address,
+      owner.getAddress(),
+      owner.getAddress(),
+      owner.getAddress(),
+      overrides
+    );
+    console.log(project)
+    });
+
+  it("change holder address on project", async function () {
+    TokenFactory = new ethers.Contract("0x0eFC99FAb24Bf6c352Bd94560be3d990CA83c85c", abiFactory, provider);
+    console.log("Token Factory: ", TokenFactory.address)
+    HolderFactory = new ethers.Contract("0x6e32B5b63f9AB084021a589AC6d2d64a1c5b6950", abiHolder, provider);
+    console.log("Escrow Factory: ", HolderFactory.address)
 
     const escrow = await HolderFactory.connect(owner).getHolder("Honduras Agriculture Project");
     const firstescrow = new ethers.Contract(escrow.projectAddress, abiHolderC, provider);
     console.log("First Escrow: ", firstescrow.address)
-
-    //deploy project
-    // const project = await TokenFactory.connect(owner).deployNewProject(
-    //   "Honduras Agriculture Project",
-    //   "HAP",
-    //   "linkhere",
-    //   Dai.address,
-    //   owner.getAddress(),
-    //   owner.getAddress(),
-    //   owner.getAddress(),
-    //   overrides
-    // );
-    // console.log(project)
     const project = await TokenFactory.connect(owner).getProject("Honduras Agriculture Project");
     const firstproject = new ethers.Contract(project.projectAddress, abiToken, provider);
     console.log("First Token/Project: ", firstproject.address)
@@ -103,19 +113,22 @@ describe("Rinkeby Deploy and Test", function () {
     console.log("address of holder: ", holderset)
     CT = new ethers.Contract("0x36bede640D19981A82090519bC1626249984c908",abiCT,provider)
     console.log("CT address: ", CT.address);
-  });
-
-  it("test buyone()", async function () {
+  })
+      
+  xit("test buyone()", async function () {
     const escrow = await HolderFactory.connect(owner).getHolder("Honduras Agriculture Project");
     const firstEscrow = new ethers.Contract(escrow.projectAddress, abiHolderC, provider);
     const project = await TokenFactory.connect(owner).getProject("Honduras Agriculture Project");
     const firstProject = new ethers.Contract(project.projectAddress, abiToken, provider);
-    
+
     // funder approve, then call recieve from project
-    await Dai.connect(owner).approve(
+    let transaction = await Dai.connect(owner).approve(
       firstProject.address, //spender, called by owner
       ethers.BigNumber.from("5000")
     );
+
+    let TxReceipt = await provider.getTransactionReceipt(transaction.hash)
+    console.log(TxReceipt)
 
     const allowedTransfer = await Dai.connect(owner).allowance(
       owner.getAddress(), //owner
@@ -127,11 +140,14 @@ describe("Rinkeby Deploy and Test", function () {
     );
 
     //buy and mint first funding token
-    await firstProject.connect(owner).buyOne(
+    transaction = await firstProject.connect(owner).buyOne(
       ethers.BigNumber.from("5"), //funded value dai
       ethers.BigNumber.from("5"), // tenor
       overrides
     );
+
+    TxReceipt = await provider.getTransactionReceipt(transaction.hash)
+    console.log(TxReceipt)
 
     //recieve the funding into the holder
     await firstEscrow
@@ -151,9 +167,9 @@ describe("Rinkeby Deploy and Test", function () {
         .ownerOf(ethers.BigNumber.from("0"))
     );
   });
-   
+
   xit("run through Gnosis conditional token and audit report as oracle", async function () {
-    //run a for loop through this later? optimize later. 
+    //run a for loop through this later? optimize later.
 
     const [bidder, auditor, funder] = await ethers.getSigners(); //jsonrpc signers from default 20 accounts with 10000 ETH each
 
