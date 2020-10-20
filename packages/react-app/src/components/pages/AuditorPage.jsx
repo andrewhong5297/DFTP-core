@@ -28,6 +28,23 @@ export const AuditorPage = (props) => {
         const owner = props.provider.getSigner();
         
         try{
+        
+        let milestone;
+        if(currentMilestone=="0x0000000000000000000000000000000000000000000000000000000000000001"){
+          milestone = await props.firstEscrow.budgetsOne()
+        }
+        if(currentMilestone=="0x0000000000000000000000000000000000000000000000000000000000000002"){
+          milestone = await props.firstEscrow.budgetsTwo()
+        }
+        if(currentMilestone=="0x0000000000000000000000000000000000000000000000000000000000000003"){
+          milestone = await props.firstEscrow.budgetsThree()
+        }
+        const totalValueInEscrow = await props.firstEscrow.totalValue()
+
+        if(parseInt(milestone.toString())>=parseInt(totalValueInEscrow.toString())){
+            Error()
+        }
+
         //1 (requires approval)
         conditionId = await props.CT.connect(owner).getConditionId(
             props.firstEscrow.address,
@@ -62,16 +79,6 @@ export const AuditorPage = (props) => {
           RejectMilestoneOne
         );
         
-        let milestone;
-        if(currentMilestone=="0x0000000000000000000000000000000000000000000000000000000000000001"){
-          milestone = await props.firstEscrow.budgetsOne()
-        }
-        if(currentMilestone=="0x0000000000000000000000000000000000000000000000000000000000000002"){
-          milestone = await props.firstEscrow.budgetsTwo()
-        }
-        if(currentMilestone=="0x0000000000000000000000000000000000000000000000000000000000000003"){
-          milestone = await props.firstEscrow.budgetsThree()
-        }
         //4 (requires approval)
         await props.firstEscrow
           .connect(owner)
@@ -131,11 +138,11 @@ export const AuditorPage = (props) => {
           <Alert variant="danger" onClose={() => setError(null)} dismissible>
               <Alert.Heading>Milestone report failed</Alert.Heading>
               <p>
-              Milestone one has already been reported on by an auditor.
+              Milestone one has already been reported on by an auditor, or has not been set. 
               </p>
           </Alert>
-      ) 
-      }
+         ) 
+        }
       }
 
       const showData = async () => {

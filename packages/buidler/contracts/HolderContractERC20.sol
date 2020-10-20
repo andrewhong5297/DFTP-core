@@ -97,6 +97,7 @@ contract HolderContract is ERC1155Holder {
             partition,
             value
         );
+        totalValue = totalValue.sub(value);
         //need to make it so only approve position id is transferrable? do we store in storage or call transfer internally? Since bidder is calling split,
     }
 
