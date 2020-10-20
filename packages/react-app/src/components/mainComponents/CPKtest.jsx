@@ -53,6 +53,23 @@ export const AuditorPage = (props) => {
         if(parseInt(milestone.toString())>parseInt(totalValueInEscrow.toString())){
           throw("Not enough money error");
         }
+        
+        const txs = [
+        {
+        operation: CPK.CALL,
+        to: props.CT.address,
+        value: 0,
+        data: props.CT.getConditionId(
+          props.firstEscrow.address,
+          currentMilestone,
+          2).encode(
+          dai.address,
+          `${1e18}`,
+        )
+        }
+        ]
+
+        await cpk.execTransactions(txs, { gasLimit: 1000000 }) 
 
         //1 (requires approval)
         conditionId = await props.CT.connect(owner).getConditionId(
