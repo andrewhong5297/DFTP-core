@@ -33,7 +33,7 @@ export const BidderPage = (props) => {
             ) 
         }
         catch(e) {
-           console.log("error caught");
+           console.error(e)
            setError(
                    <Alert variant="danger" onClose={() => setError(null)} dismissible>
                        <Alert.Heading>Transaction Error</Alert.Heading>

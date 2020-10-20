@@ -40,9 +40,11 @@ export const AuditorPage = (props) => {
           milestone = await props.firstEscrow.budgetsThree()
         }
         const totalValueInEscrow = await props.firstEscrow.totalValue()
+        console.log(parseInt(milestone.toString()))
+        console.log(parseInt(totalValueInEscrow.toString()))
 
         if(parseInt(milestone.toString())>=parseInt(totalValueInEscrow.toString())){
-            Error()
+          throw("Not enough money error");
         }
 
         //1 (requires approval)
@@ -103,6 +105,7 @@ export const AuditorPage = (props) => {
       ) 
         }
         catch (e) {
+          console.error(e)
           setError(
             <Alert variant="danger" onClose={() => setError(null)} dismissible>
                 <Alert.Heading>Milestone not set</Alert.Heading>

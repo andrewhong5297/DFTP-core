@@ -29,6 +29,8 @@ import { FunderPage } from "./components/pages/FunderPage";
 import { OwnerPage } from "./components/pages/OwnerPage";
 import { AuditorPage } from "./components/pages/AuditorPage";
 import { BidderPage } from "./components/pages/BidderPage";
+import { TransactionPopUp } from "./components/rimble/transaction"
+
 import { GET_FUNDERS } from "./graphql/subgraph";
 
 const { abi: abiToken } = require("./abis/SecurityToken.json");
@@ -91,7 +93,7 @@ function App() {
   //   setRoute(window.location.pathname)
   // }, [window.location.pathname]);
   
-  //theGraph
+  //theGraph API requests
   const { loading, gqlerror, data } = useQuery(GET_FUNDERS);
   const [ funderList, setList ] = useState("No funders yet, be the first one!")
   const queryResult = () => {
@@ -107,13 +109,11 @@ function App() {
     }
   }
     
-  //Buttons
-  const [firstEscrow, setEscrow] = useState(null);
-  const [firstProjectContract, setProject] = useState(null);
+  //Various Buttons
   const [projectNotConnected, setConnection] = useState(true);
   const { register, handleSubmit } = useForm(); //for project name submission
 
-  //initial links
+  //initial contract links
   let Dai = new ethers.Contract(
     "0x5D49B56C954D11249F59f03287619bE5c6174879",
     abiDai,
@@ -140,7 +140,8 @@ function App() {
 
   //update after project name search
   const [error, setError] = useState()
-
+  const [firstEscrow, setEscrow] = useState(null);
+  const [firstProjectContract, setProject] = useState(null);
   const updateContracts = async (formData) => {
     console.log("searching project name: ", formData.value)
     
@@ -174,7 +175,7 @@ function App() {
       </Alert>)
     }
     catch(e) {
-      console.log("error caught");
+      console.error(e)
       setError(
               <Alert variant="danger" onClose={() => setError(null)} dismissible>
                   <Alert.Heading>Link Error</Alert.Heading>
@@ -227,6 +228,7 @@ function App() {
     }
   }
 
+  //setting dai balance at bottom left
   const [daibalance, setDaiBalance] = useState(["  loading balance..."]);
   const updateDaiBalance = async () => {
     const daibalance = await Dai.balanceOf(address);
@@ -257,18 +259,6 @@ function App() {
         <BrowserRouter>
           <Switch>
             <Route exact path="/">
-              {/*
-                  🎛 this scaffolding is full of commonly used components
-                  this <Contract/> component will automatically parse your ABI
-                  and give you a form to interact with it locally
-              */}
-              {/* <Contract
-                name="YourContract"
-                signer={userProvider.getSigner()}
-                provider={localProvider}
-                address={address}
-                blockExplorer={blockExplorer}
-              /> */}
               <Container fluid="md">
                 <Row className="mt-1">
                     <Col>
@@ -312,9 +302,8 @@ function App() {
                         <div>
                           {funderList}
                         </div>
-                        
-                        </div>
-                      </Card>
+                     </div>
+                    </Card>
                   </Col>
                 </Row>
               </Container>
@@ -337,9 +326,6 @@ function App() {
   );
 }
 
-/*
-  Web3 modal helps us "connect" external wallets:
-*/
 const web3Modal = new Web3Modal({
   // network: "mainnet", // optional
   cacheProvider: true, // optional

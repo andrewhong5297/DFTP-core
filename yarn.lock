@@ -4205,6 +4205,11 @@ await-semaphore@^0.1.3:
   resolved "https://registry.yarnpkg.com/await-semaphore/-/await-semaphore-0.1.3.tgz#2b88018cc8c28e06167ae1cdff02504f1f9688d3"
   integrity sha512-d1W2aNSYcz/sxYO4pMGX9vq65qOTu0P800epMud+6cYYX0QcT7zyqcxec3VWzpgvdXo57UWmVbZpLMjX2m1I7Q==
 
+await-transaction-mined@^1.0.12:
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/await-transaction-mined/-/await-transaction-mined-1.0.12.tgz#be7b3eed6ce01e5b28f6e0588d38e70eaf2c81f8"
+  integrity sha512-UZ84Bh0TUVnXa/ioleGutsFP1/k6WGVWuZP2W1uWCbrcH6KwQmu3ZSq0gvKibsNrG7RSB+0UxnjDvzT2otkpoQ==
+
 aws-sdk@2.647.0:
   version "2.647.0"
   resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.647.0.tgz#d1edc65f0018ef8252d142e620eef20fe699e1ef"
