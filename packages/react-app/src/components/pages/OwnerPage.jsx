@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Table } from 'react-bootstrap'
 
 export const OwnerPage = (props) => {
     const welcome = "Owner role has been selected "
@@ -7,17 +8,44 @@ export const OwnerPage = (props) => {
 
     const getProjectDetails= async () => {
         projectName = await props.firstEscrow.projectName()
-        budgets = await props.firstEscrow.budgetsOne()
-        timeline = await props.firstEscrow.timelineOne()
+        const budget1 = await props.firstEscrow.budgetsOne()
+        const timeline1 = await props.firstEscrow.timelineOne()
+        const budget2 = await props.firstEscrow.budgetsTwo()
+        const timeline2 = await props.firstEscrow.timelineTwo()
+        const budget3 = await props.firstEscrow.budgetsThree()
+        const timeline3 = await props.firstEscrow.timelineThree()
 
         setText(
             <div>
-                <div>Project Name: {projectName}</div>
-                <div>Milestone One Budget: {budgets.toString()}</div>
-                <div>Timeline for Milestone One (months): {timeline.toString()}</div>
+               <h3>Project Name: {projectName}</h3>
+                <Table striped bordered hover>
+                <thead>
+                    <tr>
+                    <th>Milestone #</th>
+                    <th>Budget (Dai)</th>
+                    <th>Timeline (Months)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    <td>1</td>
+                    <td>{budget1.toString()}</td>
+                    <td>{timeline1.toString()}</td>
+                    </tr>
+                    <tr>
+                    <td>2</td>
+                    <td>{budget2.toString()}</td>
+                    <td>{timeline2.toString()}</td>
+                    </tr>
+                    <tr>
+                    <td>3</td>
+                    <td>{budget3.toString()}</td>
+                    <td>{timeline3.toString()}</td>
+                    </tr>
+                </tbody>
+                </Table>
             </div>
         )
-            
     }
 
     useEffect(() => {

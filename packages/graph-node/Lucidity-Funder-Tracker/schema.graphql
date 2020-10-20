@@ -1,0 +1,5 @@
+type FundingToken @entity {
+  id: ID!
+  fundingvalue: BigInt!
+  tenor: BigInt!
+}

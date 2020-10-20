@@ -104,4 +104,3 @@ build
 # TernJS port file
 .tern-port
 packages/buidler/mnemonic.txt
-packages/graph-node

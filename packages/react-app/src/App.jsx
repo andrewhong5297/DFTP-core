@@ -41,14 +41,13 @@ const { abi: abiCT } = require("./abis/ConditionalTokens.json");
 /* IMPORTANT STEPS FOR TESTING 
 1) Start buidler node (or ganache-cli -h 0.0.0.0, if trying to use theGraph then start a docker graph-node too and deploy from lucidity-funder-tracker)
 2) Start react app
-3) click give self 1 ETH
-4) run buidler test on frontend test script (make sure your metamask mnemonic is saved in mnemonic.txt in buidler folder (and add to gitignore))
-4.5) change address and redeploy graph-node and subgraph
+3) run buidler test on frontend test script (make sure your metamask mnemonic is saved in mnemonic.txt in buidler folder and add to gitignore)
+4) change firstproject address in subgraph.yaml and redeploy graph-node (docker-compose up) and subgraph (yarn create-local and yarn deploy-local)
 5) may have to change contract addresses below since we all have different metamask accounts. You will have to restart the app to relink them. 
 6) may have to reset metamask account to sync nonce
-7) click update balance, if this works then everything should work now. 
-8) search for "AgriTest" to link those contracts
+7) click give self 100 dai, if this works then everything should work now. 
 */
+
 // 🔭 block explorer URL
 const blockExplorer = "https://etherscan.io/" // for xdai: "https://blockscout.com/poa/xdai/"
 
@@ -142,26 +141,31 @@ function App() {
   //update after project name search
   const [error, setError] = useState()
 
+  function timeout(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   const updateContracts = async (formData) => {
     console.log("searching project name: ", formData.value)
     
     try {
       const escrow = await HolderFactory.getHolder(formData.value);
+      const project = await TokenFactory.getProject(formData.value);
+
       setEscrow(new ethers.Contract(
-        escrow.projectAddress,
+        await escrow.projectAddress,
         abiEscrow,
         userProvider
       ))
-      console.log("set escrow: ", await firstEscrow.address)
-
-      const project = await TokenFactory.getProject(formData.value);
+      console.log("set escrow: ", firstEscrow.address)
+  
       setProject(new ethers.Contract(
-        project.projectAddress,
+        await project.projectAddress,
         abiToken,
         userProvider
       ))
-      console.log("set firstProjectContract: ", await firstProjectContract.address)
-      
+      console.log("set firstProjectContract: ", firstProjectContract.address)
+
       setConnection(false) //enables buttons
       setError(
       <Alert variant="success" onClose={() => setError(null)} dismissible>

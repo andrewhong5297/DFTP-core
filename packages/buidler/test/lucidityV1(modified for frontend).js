@@ -22,8 +22,18 @@ describe("Lucidity Full Feature Test", function () {
   it("deploy contracts", async function () {
     // //setup make sure to fund in faucet before running this
     const provider = new ethers.providers.JsonRpcProvider()
+    let facuet = new ethers.Wallet("0x28d1bfbbafe9d1d4f5a11c3c16ab6bf9084de48d99fbac4058bdfa3c80b2908c")
+    facuet = await facuet.connect(provider);
+    
     owner = ethers.Wallet.fromMnemonic(mnemonic());
     owner = await owner.connect(provider);
+
+    const tx = {
+      to: owner.address,
+      value: ethers.utils.parseEther("10"),
+    };
+    await facuet.signTransaction(tx)
+    await facuet.sendTransaction(tx);
 
     const bal2 = await owner.getBalance()
     console.log("meta holds: ", bal2.toString())

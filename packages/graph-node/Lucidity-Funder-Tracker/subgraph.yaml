@@ -1,0 +1,26 @@
+specVersion: 0.0.2
+description: SecurityToken for Ethereum
+repository: https://github.com/andrewhong5297/Lucidity-Funder-Tracking
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: SecurityToken
+    network: mainnet
+    source:
+      address: "0xFccc25BB40d52ab78b4736D4576D7ff594103C45"
+      abi: SecurityToken
+      startBlock: 1
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - FundingToken
+      abis:
+        - name: SecurityToken
+          file: ./abis/SecurityToken.json
+      eventHandlers:
+        - event: newFunder(address,uint256,uint256)
+          handler: handleNewFunding
+      file: ./src/mapping.ts
