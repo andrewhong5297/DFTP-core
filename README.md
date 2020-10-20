@@ -15,7 +15,7 @@ Rinkeby site here: lucidity-eth-R.surge.sh
 
 ## Proposal of MVP
 
-![alt text](https://github.com/andrewhong5297/DFTP-core/blob/master/research/proposal.png?raw=true)
+![alt text](https://github.com/andrewhong5297/DFTP-core/blob/master/research/proposal.PNG?raw=true)
 
 
 🎛 <b>first</b>
