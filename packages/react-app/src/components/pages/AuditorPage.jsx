@@ -21,13 +21,13 @@ export const AuditorPage = (props) => {
       { value: '0x0000000000000000000000000000000000000000000000000000000000000003', label: 'Milestone Three' }
     ]
 
-    useEffect(() => {
-      const initializeCPK = async () => {
-        setProxyKit(await CPK.create({ props.provider }))
-      }
+    // useEffect(() => {
+    //   const initializeCPK = async () => {
+    //     setProxyKit(await CPK.create({ props.provider }))
+    //   }
   
-      initializeCPK()
-    }, [])
+    //   initializeCPK()
+    // }, [])
 
     const onSelected = (s) => {
       setSelected(false)
