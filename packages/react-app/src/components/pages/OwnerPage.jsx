@@ -54,7 +54,7 @@ export const OwnerPage = (props) => {
     
         return ( 
             <React.Fragment>
-                <h5>{welcome}</h5>
+                <h6>{welcome}</h6>
                 {textArea}
             </React.Fragment>
          );

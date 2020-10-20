@@ -141,30 +141,28 @@ function App() {
   //update after project name search
   const [error, setError] = useState()
 
-  function timeout(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
   const updateContracts = async (formData) => {
     console.log("searching project name: ", formData.value)
     
     try {
       const escrow = await HolderFactory.getHolder(formData.value);
+      console.log("is await failing?")
+      console.log(escrow.projectAddress)
       const project = await TokenFactory.getProject(formData.value);
+      console.log("it isnt failing?")
+      console.log(project.projectAddress)
 
-      setEscrow(new ethers.Contract(
-        await escrow.projectAddress,
+      setEscrow(await new ethers.Contract(
+        escrow.projectAddress,
         abiEscrow,
         userProvider
       ))
-      console.log("set escrow: ", firstEscrow.address)
   
-      setProject(new ethers.Contract(
-        await project.projectAddress,
+      setProject(await new ethers.Contract(
+        project.projectAddress,
         abiToken,
         userProvider
       ))
-      console.log("set firstProjectContract: ", firstProjectContract.address)
 
       setConnection(false) //enables buttons
       setError(
@@ -181,7 +179,7 @@ function App() {
               <Alert variant="danger" onClose={() => setError(null)} dismissible>
                   <Alert.Heading>Link Error</Alert.Heading>
                   <p>
-                  Looks like that didn't go through - make sure you spelled the name of the project correctly. Sometimes this takes a few tries, so give it a few seconds and click connect again.😅
+                  Looks like that didn't go through - make sure you spelled the name of the project correctly.
                   </p>
               </Alert>
           ) 
@@ -304,6 +302,7 @@ function App() {
                                 <Dropdown.Item eventKey="BidderPage">Bidder</Dropdown.Item>
                               </Dropdown.Menu>
                             </Dropdown>
+                            <br></br>
                             {PageState}
                         </div>
                       </Card>

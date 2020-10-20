@@ -173,7 +173,7 @@ export const AuditorPage = (props) => {
 
         return ( 
             <React.Fragment>
-                <h5>{welcome}</h5>
+                <h6>{welcome}</h6>
                 <div>Use the following to control the escrow/conditional tokens </div>
                 <div><Select options={options} onChange={onSelected}/></div>
                 <Button onClick = {showData} disabled={milestoneNotSelected} variant="primary" className="btn-sm m-2">

@@ -59,7 +59,7 @@ export const FunderPage = (props) => {
 
         return ( 
             <React.Fragment>
-            <h5>{welcome}</h5>
+            <h6>{welcome}</h6>
                 <form onSubmit={handleSubmit(buyOne)}>
                     <label>
                     Fund project for how much dai?   :  
