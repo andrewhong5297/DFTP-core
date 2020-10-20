@@ -69,3 +69,79 @@ export class FundingToken extends Entity {
     this.set("tenor", Value.fromBigInt(value));
   }
 }
+
+export class Project extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Project entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Project entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Project", id.toString(), this);
+  }
+
+  static load(id: string): Project | null {
+    return store.get("Project", id) as Project | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get name(): string {
+    let value = this.get("name");
+    return value.toString();
+  }
+
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
+  }
+
+  get projectAddress(): string {
+    let value = this.get("projectAddress");
+    return value.toString();
+  }
+
+  set projectAddress(value: string) {
+    this.set("projectAddress", Value.fromString(value));
+  }
+
+  get ownerAddress(): string {
+    let value = this.get("ownerAddress");
+    return value.toString();
+  }
+
+  set ownerAddress(value: string) {
+    this.set("ownerAddress", Value.fromString(value));
+  }
+
+  get bidderAddress(): string {
+    let value = this.get("bidderAddress");
+    return value.toString();
+  }
+
+  set bidderAddress(value: string) {
+    this.set("bidderAddress", Value.fromString(value));
+  }
+
+  get auditorAddress(): string {
+    let value = this.get("auditorAddress");
+    return value.toString();
+  }
+
+  set auditorAddress(value: string) {
+    this.set("auditorAddress", Value.fromString(value));
+  }
+}

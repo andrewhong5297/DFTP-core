@@ -1,6 +1,5 @@
 import React, { Component, useState} from 'react';
 import { ethers } from "ethers";
-import CPK, { EthersAdapter } from 'contract-proxy-kit';
 import { Button, Alert } from "react-bootstrap"
 import Select from 'react-select'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -20,10 +19,6 @@ export const AuditorPage = (props) => {
       { value: '0x0000000000000000000000000000000000000000000000000000000000000002', label: 'Milestone Two' },
       { value: '0x0000000000000000000000000000000000000000000000000000000000000003', label: 'Milestone Three' }
     ]
-
-    const ethLibAdapter = new EthersAdapter({ ethers, signer: owner });
-    const cpk = await CPK.create({ ethLibAdapter });
-    console.log(cpk.address)
     
     const onSelected = (s) => {
       setSelected(false)
