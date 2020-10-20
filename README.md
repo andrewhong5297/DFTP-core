@@ -7,7 +7,7 @@
 
 
 
-# 💡 Lucidity
+# ![alt text](https://github.com/LucidityDev/DFTP-core/blob/master/research/LogoLucidity.png?raw=true)
 
 ### Management of Funds for Projects/Contracts/Services for Private/Public Organizations the MVP is a DAPP that will evolve in a Protocol 
 Localhost site here: http://lucidity-eth.surge.sh/
