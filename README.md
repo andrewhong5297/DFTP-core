@@ -17,6 +17,9 @@ Rinkeby site here: lucidity-eth-R.surge.sh
 
 ![alt text](https://github.com/andrewhong5297/DFTP-core/blob/master/research/proposal.PNG?raw=true)
 
+## Mission Statement
+
+![alt text](https://github.com/andrewhong5297/DFTP-core/blob/master/research/mission.png?raw=true)
 
 🎛 <b>first</b>
 
