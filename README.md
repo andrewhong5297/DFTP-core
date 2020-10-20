@@ -11,7 +11,8 @@
 
 ### Management of Funds for Projects/Contracts/Services for Private/Public Organizations the MVP is a DAPP that will evolve in a Protocol 
 Localhost site here: http://lucidity-eth.surge.sh/
-Rinkeby site here: lucidity-eth-R.surge.sh
+
+Rinkeby site here: http://lucidity-eth-R.surge.sh
 
 ## Proposal of MVP
 
