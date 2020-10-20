@@ -92,7 +92,6 @@ function App() {
   //   setRoute(window.location.pathname)
   // }, [window.location.pathname]);
   
-  //not part of scaffold-eth
   //theGraph
   const { loading, gqlerror, data } = useQuery(GET_FUNDERS);
   const [ funderList, setList ] = useState("No funders yet, be the first one!")
@@ -109,8 +108,10 @@ function App() {
     }
   }
     
+  //Buttons
   const [firstEscrow, setEscrow] = useState(null);
   const [firstProjectContract, setProject] = useState(null);
+  const [projectNotConnected, setConnection] = useState(true);
   const { register, handleSubmit } = useForm(); //for project name submission
 
   //initial links
@@ -161,6 +162,7 @@ function App() {
       ))
       console.log("set firstProjectContract: ", await firstProjectContract.address)
       
+      setConnection(false) //enables buttons
       setError(
       <Alert variant="success" onClose={() => setError(null)} dismissible>
           <Alert.Heading>Link Worked</Alert.Heading>
@@ -175,7 +177,7 @@ function App() {
               <Alert variant="danger" onClose={() => setError(null)} dismissible>
                   <Alert.Heading>Link Error</Alert.Heading>
                   <p>
-                  Looks like that didn't go through - make sure you spelled the name of the project correctly.
+                  Looks like that didn't go through - make sure you spelled the name of the project correctly. Sometimes this takes a few tries, so give it a few seconds and click connect again.😅
                   </p>
               </Alert>
           ) 
@@ -270,42 +272,40 @@ function App() {
                     <Col>
                     <Card>
                       <div className="cardDiv">
-                        <h5>Welcome, please select a role in the dropdown to get started.<br /> This can be changed anytime.</h5>
-                          <Dropdown onSelect={handleSelect}>
-                            <Dropdown.Toggle variant="primary" id="dropdown-basic" size="md">
-                              Roles
-                            </Dropdown.Toggle>
-
-                            <Dropdown.Menu>
-                              <Dropdown.Item eventKey="OwnerPage">Owner</Dropdown.Item>
-                              <Dropdown.Item eventKey="FunderPage">Funder</Dropdown.Item>
-                              <Dropdown.Item eventKey="AuditorPage">Auditor</Dropdown.Item>
-                              <Dropdown.Item eventKey="BidderPage">Bidder</Dropdown.Item>
-                            </Dropdown.Menu>
-                          </Dropdown>
-                      </div>
-                      </Card>
-                      <Card className="mt-1">
-                      <div className="cardDiv">
-                      <h6 classname="mt-1">Please {link} for new projects, otherwise search for project name below:</h6>
-                        <form onSubmit={handleSubmit(updateContracts)} className="">
-                          <div className="input-group mb-3">
+                        <h6 classname="mt-1">Please {link} for new projects, otherwise search for project name below:</h6>
+                          <form onSubmit={handleSubmit(updateContracts)} className="">
+                            <div className="input-group mb-3">
                                 <div className="input-group-append col-centered">
                                   <label>
-                                  <input type="text" name="value" ref={register} className="form-control" placeholder="" aria-describedby="button-addon2" />
+                                  <input type="text" name="value" ref={register} className="form-control" placeholder="Honduras Agriculture Project" aria-describedby="button-addon2" />
                                   </label>
-                                  <div><button className="btn col-centeredbtn btn-outline-secondary" type="submit" value="submit" id="button-addon2">Submit</button></div>
-                                  
+                                  <div><button className="btn col-centeredbtn btn-outline-secondary" type="submit" value="submit" id="button-addon2">Connect to Project</button></div>
                                 </div>
                               </div>
                         </form>
                         {error}
-                        {PageState}
+                        </div>
+                      </Card>
+                      <Card className="mt-1">
+                        <div className="cardDiv">
+                            <Dropdown onSelect={handleSelect}>
+                              <Dropdown.Toggle variant="primary" id="dropdown-basic" size="md" disabled={projectNotConnected}>
+                                Roles
+                              </Dropdown.Toggle>
+
+                              <Dropdown.Menu>
+                                <Dropdown.Item eventKey="OwnerPage">Owner</Dropdown.Item>
+                                <Dropdown.Item eventKey="FunderPage">Funder</Dropdown.Item>
+                                <Dropdown.Item eventKey="AuditorPage">Auditor</Dropdown.Item>
+                                <Dropdown.Item eventKey="BidderPage">Bidder</Dropdown.Item>
+                              </Dropdown.Menu>
+                            </Dropdown>
+                            {PageState}
                         </div>
                       </Card>
                       <Card className="mt-1">
                     <div className="cardDiv"><h6>List of all funders for selected project:</h6>
-                        <Button onClick = {queryResult} size="sm">Update Funders List</Button>
+                        <Button onClick = {queryResult} disabled = {projectNotConnected} size="sm">Update Funders List</Button>
                         <div>
                           {funderList}
                         </div>
@@ -316,7 +316,7 @@ function App() {
                 </Row>
               </Container>
                 <div className="fixed-bottom">
-                  <h5 style={{color: "black"}}>Wallet faucet here</h5>
+                  <h5 style={{color: "black"}}>: Localhost faucet here</h5>
                   <Button onClick = {updateDaiBalance} size="sm">Update Dai Balance</Button>
                   {daibalance}
                   <Buttons 

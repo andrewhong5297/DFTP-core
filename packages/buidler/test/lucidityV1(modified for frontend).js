@@ -45,7 +45,7 @@ describe("Lucidity Full Feature Test", function () {
     //use USDC on testnet/mainnet
     const DaiContract = await ethers.getContractFactory("Dai"); //contract name here
     Dai = await DaiContract.connect(owner).deploy(ethers.BigNumber.from("0"),overrides);
-    await Dai.connect(owner).mint(owner.getAddress(),ethers.BigNumber.from("100"))
+    await Dai.connect(owner).mint(owner.getAddress(),ethers.BigNumber.from("10000"))
     
     console.log("all deployed")
     const daibalance = await Dai.balanceOf(owner.getAddress());
@@ -65,8 +65,12 @@ describe("Lucidity Full Feature Test", function () {
       owner.getAddress(),
       owner.getAddress(),
       owner.getAddress(),
+      ethers.BigNumber.from("500"),
+      ethers.BigNumber.from("36"),
       ethers.BigNumber.from("300"),
-      ethers.BigNumber.from("3"),
+      ethers.BigNumber.from("32"),
+      ethers.BigNumber.from("800"),
+      ethers.BigNumber.from("24"),
       overrides
     );
 

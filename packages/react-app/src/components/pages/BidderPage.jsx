@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ethers } from "ethers";
-import { Alert } from "react-bootstrap"
+import { Button, Alert } from "react-bootstrap"
 
 export const BidderPage = (props) => {
     const welcome = "Bidder role has been selected"
@@ -47,9 +47,9 @@ export const BidderPage = (props) => {
         return ( 
             <React.Fragment>
                 <h5>{welcome}</h5>
-                <button onClick = {redeemTokens} variant="primary" className="btn-sm m-2">
+                <Button onClick = {redeemTokens} variant="primary" className="btn-sm m-2">
                     Redeem Payout
-                </button>
+                </Button>
                 {error}
             </React.Fragment>
          );

@@ -1,7 +1,7 @@
 import React, { useState, Component } from 'react';
 import { useForm } from "react-hook-form";
 import { ethers } from "ethers";
-import { Alert } from "react-bootstrap"
+import { Button, Alert } from "react-bootstrap"
 
 export const FunderPage = (props) => {
     const welcome = "Funder role has been selected"

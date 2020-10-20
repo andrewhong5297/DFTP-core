@@ -67,8 +67,12 @@ describe("Rinkeby Deploy and Test", function () {
     //   owner.getAddress(),
     //   owner.getAddress(),
     //   owner.getAddress(),
+    //   ethers.BigNumber.from("500"),
+    //   ethers.BigNumber.from("36"),
     //   ethers.BigNumber.from("300"),
-    //   ethers.BigNumber.from("3"),
+    //   ethers.BigNumber.from("32"),
+    //   ethers.BigNumber.from("800"),
+    //   ethers.BigNumber.from("24"),
     //   overrides
     // );
     // console.log(escrow)
@@ -95,54 +99,57 @@ describe("Rinkeby Deploy and Test", function () {
 
     await firstproject.connect(owner).setHolder(
       firstescrow.address);
-
+    const holderset = await firstproject.holderContract()
+    console.log("address of holder: ", holderset)
     CT = new ethers.Contract("0x36bede640D19981A82090519bC1626249984c908",abiCT,provider)
     console.log("CT address: ", CT.address);
   });
 
-  xit("test buyone()", async function () {
-    const firstEscrow = new ethers.Contract("0x32530d25E0448E7B0da28B80a778613f8A02adB6", abiHolderC, provider);
-    const firstProjectContract = new ethers.Contract("0xE6a9cf47cA7e6692a6c27EB0D59e857C5b160E86", abiToken, provider);
+  it("test buyone()", async function () {
+    const escrow = await HolderFactory.connect(owner).getHolder("Honduras Agriculture Project");
+    const firstEscrow = new ethers.Contract(escrow.projectAddress, abiHolderC, provider);
+    const project = await TokenFactory.connect(owner).getProject("Honduras Agriculture Project");
+    const firstProject = new ethers.Contract(project.projectAddress, abiToken, provider);
     
     // funder approve, then call recieve from project
     await Dai.connect(owner).approve(
-      firstProjectContract.address, //spender, called by owner
-      ethers.BigNumber.from("5")
+      firstProject.address, //spender, called by owner
+      ethers.BigNumber.from("5000")
     );
 
     const allowedTransfer = await Dai.connect(owner).allowance(
       owner.getAddress(), //owner
-      firstProjectContract.address //spender
+      firstProject.address //spender
     );
     console.log(
       "How much Dai will be transferred to project to mint token (allowance): ",
       allowedTransfer.toString()
     );
 
-    // //buy and mint first funding token
-    // await firstProjectContract.connect(owner).buyOne(
-    //   ethers.BigNumber.from("5"), //funded value dai
-    //   ethers.BigNumber.from("5"), // tenor
-    //   overrides
-    // );
+    //buy and mint first funding token
+    await firstProject.connect(owner).buyOne(
+      ethers.BigNumber.from("5"), //funded value dai
+      ethers.BigNumber.from("5"), // tenor
+      overrides
+    );
 
-    // //recieve the funding into the holder
-    // await firstEscrow
-    //   .connect(owner) //anyone can call this, idk why it won't call by itself. Pay for gas fees?
-    //   .recieveERC20(firstProjectContract.address, ethers.BigNumber.from("3"));
+    //recieve the funding into the holder
+    await firstEscrow
+      .connect(owner) //anyone can call this, idk why it won't call by itself. Pay for gas fees?
+      .recieveERC20(firstProject.address, ethers.BigNumber.from("3"));
 
-    // const daibalance = await Dai.balanceOf(owner.getAddress());
-    // console.log("funder balance of Dai: ", daibalance.toString());
+    const daibalance = await Dai.balanceOf(owner.getAddress());
+    console.log("funder balance of Dai: ", daibalance.toString());
 
-    // const daibalance2 = await Dai.balanceOf(firstEscrow.address);
-    // console.log("escrow balance of Dai: ", daibalance2.toString());
+    const daibalance2 = await Dai.balanceOf(firstEscrow.address);
+    console.log("escrow balance of Dai: ", daibalance2.toString());
 
-    // console.log(
-    //   "Holder of minted token: ",
-    //   await firstProjectContract
-    //     .connect(owner)
-    //     .ownerOf(ethers.BigNumber.from("0"))
-    // );
+    console.log(
+      "Holder of minted token: ",
+      await firstProject
+        .connect(owner)
+        .ownerOf(ethers.BigNumber.from("0"))
+    );
   });
    
   xit("run through Gnosis conditional token and audit report as oracle", async function () {
