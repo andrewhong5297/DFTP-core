@@ -2,6 +2,7 @@ import React, { Component, useState} from 'react';
 import { ethers } from "ethers";
 import { Button, Alert } from "react-bootstrap"
 import Select from 'react-select'
+import CPK from "contract-proxy-kit"
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export const AuditorPage = (props) => {
@@ -10,13 +11,23 @@ export const AuditorPage = (props) => {
     const [dataBoard, setDataBoard] = useState()
     const [milestoneNotSelected, setSelected] = useState(true);
     const [currentMilestone, setMilestone] = useState("0x0000000000000000000000000000000000000000000000000000000000000001");
-    let conditionId;
+    const [proxyKit, setProxyKit] =useState(null)
 
+    let conditionId;
+    
     const options = [
       { value: '0x0000000000000000000000000000000000000000000000000000000000000001', label: 'Milestone One' },
       { value: '0x0000000000000000000000000000000000000000000000000000000000000002', label: 'Milestone Two' },
       { value: '0x0000000000000000000000000000000000000000000000000000000000000003', label: 'Milestone Three' }
     ]
+
+    useEffect(() => {
+      const initializeCPK = async () => {
+        setProxyKit(await CPK.create({ props.provider }))
+      }
+  
+      initializeCPK()
+    }, [])
 
     const onSelected = (s) => {
       setSelected(false)

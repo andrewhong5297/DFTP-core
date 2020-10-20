@@ -29,7 +29,6 @@ import { FunderPage } from "./components/pages/FunderPage";
 import { OwnerPage } from "./components/pages/OwnerPage";
 import { AuditorPage } from "./components/pages/AuditorPage";
 import { BidderPage } from "./components/pages/BidderPage";
-import { TransactionPopUp } from "./components/rimble/transaction"
 
 import { GET_FUNDERS } from "./graphql/subgraph";
 
