@@ -283,7 +283,13 @@ function App() {
                         <OpenLawForm 
                           role = {RoleState}
                           provider ={userProvider} 
-                          OLF = {OpenLawFactory}/>
+                          OLF = {OpenLawFactory}
+                          address={address} 
+                          provider ={userProvider} 
+                          TokenFactory = {TokenFactory}
+                          HolderFactory = {HolderFactory}
+                          CT = {CT}
+                          Dai = {Dai}/>
                       </div>
                     </Card>
                     <Card>

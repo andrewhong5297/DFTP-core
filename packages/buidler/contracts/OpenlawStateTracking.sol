@@ -114,6 +114,8 @@ contract ProjectNegotiationTracker {
         HF = IHolderFactory(_HolderFactory);
     }
 
+    address[] public all_bidders;
+
     mapping(address => uint256[]) public BidderToTimeline;
     mapping(address => uint256[]) public BidderToBudgets;
     mapping(address => bool) public BidderProposalStatus;
@@ -177,6 +179,11 @@ contract ProjectNegotiationTracker {
         returns (uint256[] memory _timelines, uint256[] memory _budgets)
     {
         return (budgetsOwner, timelinesOwner);
+    }
+
+    //loads all bidders
+    function getAllBidderAddresses() external view returns (address[] memory) {
+        return (all_bidders);
     }
 
     //loads bidder terms for owner to see

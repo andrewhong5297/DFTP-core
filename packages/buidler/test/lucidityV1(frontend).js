@@ -57,6 +57,12 @@ describe("Lucidity Full Feature Test", function () {
     Dai = await DaiContract.connect(owner).deploy(ethers.BigNumber.from("0"),overrides);
     await Dai.connect(owner).mint(owner.getAddress(),ethers.BigNumber.from("10000"))
     
+    //deploy neg contract
+    const OpenLawFactoryContract = await ethers.getContractFactory(
+      "ProjectTrackerFactory"
+    ); //contract name here
+    OpenLawFactory = await OpenLawFactoryContract.connect(owner).deploy(overrides);
+
     console.log("all deployed")
     const daibalance = await Dai.balanceOf(owner.getAddress());
     console.log("meta address: ", await owner.getAddress());
@@ -64,9 +70,10 @@ describe("Lucidity Full Feature Test", function () {
 
     console.log("tokenfactory address: ", TokenFactory.address);
     console.log("holderfactory address: ", HolderFactory.address);
+    console.log("openlawneg address: ", OpenLawFactory.address);
   });
 
-  it("deploy first escrow and project (Called from openlaw)", async function () {
+  xit("deploy first escrow and project (Called from openlaw)", async function () {
     //deploy escrow
     await HolderFactory.connect(owner).deployNewHolder(
       "Honduras Agriculture Project",
@@ -129,7 +136,7 @@ describe("Lucidity Full Feature Test", function () {
   });
 
   
-  it("deploy second escrow and project (Called from openlaw)", async function () {
+  xit("deploy second escrow and project (Called from openlaw)", async function () {
     //deploy escrow
     await HolderFactory.connect(owner).deployNewHolder(
       "Indonesia Water Project",
