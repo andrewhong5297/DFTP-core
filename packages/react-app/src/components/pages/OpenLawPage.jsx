@@ -104,7 +104,7 @@ export const OpenLawForm = (props) => {
                         <label>
                         <input type="text" name="value" ref={register_bidder_search} className="form-control" placeholder="Honduras Agriculture Project" aria-describedby="button-addon2" />
                         </label>
-                        <div><button className="btn col-centeredbtn btn-outline-secondary" type="submit" value="submit" id="button-addon2">Pull up bidder review</button></div>
+                        <div><button className="btn col-centeredbtn btn-outline-secondary" type="submit" value="submit" id="button-addon2">Pull up owner milestone template</button></div>
                         </div>
                     </div>
                  </form>
@@ -156,7 +156,6 @@ export const OpenLawForm = (props) => {
             const toPush = await projectContract.connect(user).loadBidderTerms(all_addresses[i])
             all_address_proposals.push(toPush)
           }
-          console.log(all_address_proposals)
           
           changeForm(
             all_address_proposals.map(( {_budgets, _timelines}, index) => {
@@ -214,13 +213,16 @@ export const OpenLawForm = (props) => {
     }
 
     const finalApproval = async (bidderAddress) => {
+        //send to IPFS here? 
+        
         await projectContract.connect(user).approveBidderTerms(
             bidderAddress, //this should be bidder later
             props.CT.address,
             props.Dai.address,
-            user.getAddress() //this should be auditor later
+            user.getAddress(), //this should be auditor later
+            "hashGoesHere"
             )
-        
+
         //setting escrow
         const escrow = await props.HolderFactory.getHolder(projectName);
         console.log(escrow)
@@ -241,22 +243,27 @@ export const OpenLawForm = (props) => {
     
     return (
         <div>
-                <div><h6>For New Project Setup Only:</h6></div>
-                <div className="input-group mb-3 col-centered">
-                   <Dropdown onSelect={handleSelect}>
-                        <Dropdown.Toggle variant="primary" id="dropdown-basic" size="md">
-                        Project Setup Roles
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu>
-                            <Dropdown.Item eventKey="owner">Owner</Dropdown.Item>
-                            <Dropdown.Item eventKey="bidder">Bidder</Dropdown.Item>
-                        </Dropdown.Menu>  
-                    </Dropdown>
-                </div>
-                <br></br>
-                <div>
-                {formState}
-                </div>
+            <Container>
+                <Row>
+                    <Col>
+                        <div><h6>For New Project Setup Only:</h6></div>
+                        <div className="input-group mb-3 col-centered">
+                        <Dropdown onSelect={handleSelect}>
+                                <Dropdown.Toggle variant="primary" id="dropdown-basic" size="md">
+                                Project Setup Roles
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    <Dropdown.Item eventKey="owner">Owner</Dropdown.Item>
+                                    <Dropdown.Item eventKey="bidder">Bidder</Dropdown.Item>
+                                </Dropdown.Menu>  
+                            </Dropdown>
+                        </div>
+                    </Col>
+                </Row>
+                <Row>
+                    {formState}
+                </Row>
+            </Container>
         </div>
     )
 }

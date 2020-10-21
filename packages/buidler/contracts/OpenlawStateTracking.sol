@@ -85,6 +85,7 @@ contract ProjectNegotiationTracker {
     string public projectName;
     string public symbol;
     string public milestones;
+    string public hashURI;
     address public winningBidder;
     uint256[] public timelinesOwner;
     uint256[] public budgetsOwner;
@@ -141,12 +142,18 @@ contract ProjectNegotiationTracker {
         address _bidder,
         address _CTaddress,
         address _ERC20address,
-        address auditor
+        address auditor,
+        string calldata IPFShash
     ) external {
         require(msg.sender == owner, "Only project owner can approve terms");
         ownerApproval = true;
         BidderProposalStatus[_bidder] = true;
         winningBidder = _bidder;
+        hashURI = IPFShash;
+
+        //adjust owner terms to be same as bidder terms
+        budgetsOwner = BidderToBudgets[msg.sender];
+        timelinesOwner = BidderToTimeline[msg.sender];
 
         //deploy holder
         HF.deployNewHolder(
@@ -163,7 +170,7 @@ contract ProjectNegotiationTracker {
         TF.deployNewProject(
             projectName,
             symbol,
-            "fillInWithIPFSHash",
+            IPFShash,
             _ERC20address,
             owner,
             _bidder,

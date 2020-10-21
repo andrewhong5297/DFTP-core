@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Table } from 'react-bootstrap'
+const { abi: abiOL } = require("../../abis/ProjectNegotiationTracker.json");
 
 export const OwnerPage = (props) => {
     const welcome = "Owner role has been selected "
     let projectName,budgets,timeline;
     const [textArea, setText] = useState("loading...")
-
+    
+    // const projectNeg = await OpenLawFactory.connect(user).getProject(projectName)
+    // const projectNegContract = new ethers.Contract(
+    //     project.projectAddress, //insert new project deployed address
+    //     abiOL,
+    //     props.userProvider
+    // );
     const getProjectDetails= async () => {
         projectName = await props.escrow.projectName()
         const budgets = await props.escrow.getBudgets()
