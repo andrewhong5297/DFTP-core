@@ -73,7 +73,7 @@ describe("Lucidity Full Feature Test", function () {
     console.log("openlawneg address: ", OpenLawFactory.address);
   });
 
-  it("deploy first escrow and project (Called from openlaw)", async function () {
+  xit("deploy first escrow and project (Called from openlaw)", async function () {
     //deploy escrow
     await HolderFactory.connect(owner).deployNewHolder(
       "Honduras Agriculture Project",
@@ -136,7 +136,7 @@ describe("Lucidity Full Feature Test", function () {
   });
 
   
-  it("deploy second escrow and project (Called from openlaw)", async function () {
+ xit("deploy second escrow and project (Called from openlaw)", async function () {
     //deploy escrow
     await HolderFactory.connect(owner).deployNewHolder(
       "Indonesia Water Project",

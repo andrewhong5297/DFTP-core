@@ -5,6 +5,8 @@ import { Button, Container, Row, Col, Card, Dropdown, Alert } from "react-bootst
 import "../../App.css";
 const { abi: abiOLF } = require("../../abis/ProjectTrackerFactory.json");
 const { abi: abiOL } = require("../../abis/ProjectNegotiationTracker.json");
+const { abi: abiToken } = require("../../abis/SecurityToken.json");
+const { abi: abiEscrow } = require("../../abis/HolderContract.json");
 
 export const OpenLawForm = (props) => {
     const [formState, changeForm] = useState(<div>Choose your role</div>)
@@ -15,7 +17,7 @@ export const OpenLawForm = (props) => {
     const user = props.provider.getSigner();
 
     let role = "owner"
-    let project, projectContract; //assigned in pullupform
+    let project, projectContract, projectName; //assigned in pullupform
 
     let OpenLawFactory = new ethers.Contract(
         "0xDe866932D277DB5B5d8c22c4f429d8045e6d4F82", //insert new project deployed address
@@ -123,8 +125,6 @@ export const OpenLawForm = (props) => {
             formData.milestone1 + ";" + formData.milestone2 + ";" + formData.milestone3, //form data
             [ethers.BigNumber.from(formData.milestone1timeline),ethers.BigNumber.from(formData.milestone2timeline),ethers.BigNumber.from(formData.milestone3timeline)], //3 form data
             [ethers.BigNumber.from(formData.milestone1budget),ethers.BigNumber.from(formData.milestone2budget),ethers.BigNumber.from(formData.milestone3budget)]) //3 form data
-
-            console.log(newProject) 
         }
     }
 
@@ -133,13 +133,12 @@ export const OpenLawForm = (props) => {
             const bidderTerms = await projectContract.connect(user).newBidderTerms(
                 [ethers.BigNumber.from(formData.milestone1timeline),ethers.BigNumber.from(formData.milestone2timeline),ethers.BigNumber.from(formData.milestone3timeline)], //3 form data
                 [ethers.BigNumber.from(formData.milestone1budget),ethers.BigNumber.from(formData.milestone2budget),ethers.BigNumber.from(formData.milestone3budget)]) //3 form data
-            console.log(bidderTerms)
         }
     }
 
     const pullUpForm = async (formData) => {
-        project = await OpenLawFactory.connect(user).getProject(formData.value)
-        console.log(project)
+        projectName = formData.value
+        project = await OpenLawFactory.connect(user).getProject(projectName)
         projectContract = new ethers.Contract(
             project.projectAddress, //insert new project deployed address
             abiOL,
@@ -155,16 +154,17 @@ export const OpenLawForm = (props) => {
 
           for (let i = 0; i < all_addresses.length; i++) {
             const toPush = await projectContract.connect(user).loadBidderTerms(all_addresses[i])
-            console.log(`${i}: ${toPush}`)
             all_address_proposals.push(toPush)
           }
+          console.log(all_address_proposals)
+          
           changeForm(
-            all_address_proposals.map(({ _budgets, _timelines}) => (
-                <button onClick={(id) => approveTest(id)} id={all_addresses[0]}>
+            all_address_proposals.map(({ index, _budgets, _timelines}) => (
+                <button onClick={() => finalApproval(all_addresses[0])} id={all_addresses[0]}>
                     <div>
-                    <div>Proposer: {all_addresses[0]}</div>
-                    <div>Project Budget: {_budgets[0].toString()}</div>
-                    <div>Project Timeline: {_timelines[0].toString()}</div>
+                    <div>Proposer: {0} {all_addresses[0]}</div>
+                    <div>Project Budget: {_budgets[0].toString()} dai, {_budgets[1].toString()} dai, {_budgets[2].toString()} dai</div>
+                    <div>Project Timeline: {_timelines[0].toString()} months, {_timelines[1].toString()} months, {_timelines[2].toString()} months</div>
                     </div>
                 </button>
                 ))
@@ -212,18 +212,30 @@ export const OpenLawForm = (props) => {
         }
     }
 
-    const approveTest = (e) => {
-        console.log(e)
-        console.log("button works")
-    }
-
-    const finalApproval = async (projectContract, bidderAddress) => {
+    const finalApproval = async (bidderAddress) => {
         await projectContract.connect(user).approveBidderTerms(
             bidderAddress, //this should be bidder later
             props.CT.address,
             props.Dai.address,
             user.getAddress() //this should be auditor later
             )
+        
+        //setting escrow
+        const escrow = await props.HolderFactory.getHolder(projectName);
+        console.log(escrow)
+
+        const project = await props.TokenFactory.getProject(projectName);
+        console.log(project)
+
+        const firstProjectContract = new ethers.Contract(
+        project.projectAddress,
+        abiToken,
+        props.userProvider
+        );
+
+        console.log(firstProjectContract)
+        await firstProjectContract.connect(user).setHolder(
+        escrow.projectAddress);
     }
     
     return (
