@@ -9,10 +9,10 @@ import { gql } from "apollo-boost";
 // if you get errors, run docker-compose down --volume or rd /s /q "data/postgres"
 export const GET_FUNDERS = gql`
 {
-  projects(first: 5) {
+  projects(first: 10) {
     id
     name
-    fundingTokens(first: 5) {
+    fundingTokens(first: 10) {
       id
       owner
       fundingvalue
