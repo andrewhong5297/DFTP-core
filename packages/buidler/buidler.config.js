@@ -80,6 +80,7 @@ module.exports = {
       runs: 200,
     },
   },
+  timeout: 10000,
 };
 
 const DEBUG = false;
