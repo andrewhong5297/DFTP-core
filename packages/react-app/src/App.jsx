@@ -177,9 +177,9 @@ function App() {
     else {
       console.log(data)
         //https://www.apollographql.com/docs/react/get-started/
-        setList(data.fundingTokens.map(({ id, owner, fundingvalue, tenor}) => (
+        setList(data.projects[1].fundingTokens.map(({ id, owner, fundingvalue, tenor}) => (
         <div>
-          <div>Project Address: {data.projects.projectAddress}</div>
+          <div>Project Address: {data.projects[1].projectAddress}</div>
           <div>Token id: {id}</div>
           <div>Owner: {owner}</div> 
           <div>Funded amount: {fundingvalue.toString()} dai</div>
