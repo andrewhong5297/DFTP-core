@@ -8,13 +8,9 @@ export const OwnerPage = (props) => {
 
     const getProjectDetails= async () => {
         projectName = await props.escrow.projectName()
-        const budget1 = await props.escrow.budgetsOne()
-        const timeline1 = await props.escrow.timelineOne()
-        const budget2 = await props.escrow.budgetsTwo()
-        const timeline2 = await props.escrow.timelineTwo()
-        const budget3 = await props.escrow.budgetsThree()
-        const timeline3 = await props.escrow.timelineThree()
-
+        const budgets = await props.escrow.getBudgets()
+        const timelines = await props.escrow.getTimelines()
+        console.log(budgets[0].toString())
         setText(
             <div>
                <h3>Project Name: {projectName}</h3>
@@ -29,18 +25,18 @@ export const OwnerPage = (props) => {
                 <tbody>
                     <tr>
                     <td>1</td>
-                    <td>{budget1.toString()}</td>
-                    <td>{timeline1.toString()}</td>
+                    <td>{budgets[0].toString()}</td>
+                    <td>{timelines[0].toString()}</td>
                     </tr>
                     <tr>
                     <td>2</td>
-                    <td>{budget2.toString()}</td>
-                    <td>{timeline2.toString()}</td>
+                    <td>{budgets[1].toString()}</td>
+                    <td>{timelines[1].toString()}</td>
                     </tr>
                     <tr>
                     <td>3</td>
-                    <td>{budget3.toString()}</td>
-                    <td>{timeline3.toString()}</td>
+                    <td>{budgets[2].toString()}</td>
+                    <td>{timelines[2].toString()}</td>
                     </tr>
                 </tbody>
                 </Table>

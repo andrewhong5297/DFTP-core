@@ -29,7 +29,7 @@ import { FunderPage } from "./components/pages/FunderPage";
 import { OwnerPage } from "./components/pages/OwnerPage";
 import { AuditorPage } from "./components/pages/AuditorPage";
 import { BidderPage } from "./components/pages/BidderPage";
-
+import { OpenLawForm } from "./components/pages/OpenLawPage";
 import { GET_FUNDERS } from "./graphql/subgraph";
 
 const { abi: abiToken } = require("./abis/SecurityToken.json");
@@ -38,6 +38,8 @@ const { abi: abiTokenF } = require("./abis/TokenFactory.json");
 const { abi: abiEscrowF } = require("./abis/HolderFactory.json");
 const { abi: abiDai } = require("./abis/Dai.json");
 const { abi: abiCT } = require("./abis/ConditionalTokens.json");
+const { abi: abiOLF } = require("./abis/ProjectTrackerFactory.json");
+
 
 /* IMPORTANT STEPS FOR TESTING 
 1) Start buidler node with yarn chain (or ganache-cli -h 0.0.0.0). Take one of the private keys and place it in the faucet address in test contract (line 25)
@@ -118,6 +120,12 @@ function App() {
     userProvider
   );
 
+  let OpenLawFactory = new ethers.Contract(
+    "0x5D49B56C954D11249F59f03287619bE5c6174879",
+    abiOLF,
+    userProvider
+  );
+  
   //update after project name search
   const [error, setError] = useState()
   const [projectNotConnected, setConnection] = useState(true);
@@ -175,11 +183,11 @@ function App() {
     if (loading) console.log("loading")
     if (gqlerror) console.log("error")
     else {
-      console.log(data)
+      console.log(ProjectName)
         //https://www.apollographql.com/docs/react/get-started/
-        setList(data.projects[ProjectName].fundingTokens.map(({ id, owner, fundingvalue, tenor}) => (
+        setList(data.projects[0].fundingTokens.map(({ id, owner, fundingvalue, tenor}) => (
         <div>
-          <div>Project Address: {data.projects[ProjectName].projectAddress}</div>
+          <div>Project Address: {data.projects[0].projectAddress}</div>
           <div>Token id: {id}</div>
           <div>Owner: {owner}</div> 
           <div>Funded amount: {fundingvalue.toString()} dai</div>
@@ -202,6 +210,7 @@ function App() {
 
   //roles dropdown
   const [PageState, setPage] = useState([<HomePage />])
+  const [RoleState, setRole] = useState("Owner")
   const handleSelect=(e)=>{
     console.log(`${e} has been selected`);
     if (e=="FunderPage") {
@@ -211,6 +220,7 @@ function App() {
         escrow = {Escrow}
         Project = {Project}
         Dai = {Dai}/>)
+      setRole("Funder")
     }
     if (e=="BidderPage") {
       setPage(<BidderPage 
@@ -220,6 +230,7 @@ function App() {
         Project = {Project}
         Dai = {Dai}
         CT={CT}/>)
+      setRole("Bidder")
     }
     if (e=="AuditorPage") {
       setPage(<AuditorPage 
@@ -229,6 +240,7 @@ function App() {
         Project = {Project}
         Dai = {Dai}
         CT={CT}/>)
+      setRole("Auditor")
     }
     if (e=="OwnerPage") {
       setPage(<OwnerPage 
@@ -238,6 +250,7 @@ function App() {
         Project = {Project}
         Dai = {Dai}
         CT={CT}/>)
+      setRole("Owner")
     }
   }
 
@@ -265,6 +278,14 @@ function App() {
               <Container fluid="md">
                 <Row className="mt-1">
                     <Col>
+                    <Card>
+                      <div className="cardDiv">
+                        <OpenLawForm 
+                          role = {RoleState}
+                          provider ={userProvider} 
+                          OLF = {OpenLawFactory}/>
+                      </div>
+                    </Card>
                     <Card>
                       <div className="cardDiv">
                         <h6 className="mt-1">Please {link} for new projects, otherwise search for project name below:</h6>

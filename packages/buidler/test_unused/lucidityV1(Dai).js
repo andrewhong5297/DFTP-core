@@ -47,12 +47,8 @@ describe("Lucidity Full Feature Test", function () {
       owner.getAddress(),
       bidder.getAddress(),
       auditor.getAddress(),
-      ethers.BigNumber.from("500"),
-      ethers.BigNumber.from("36"),
-      ethers.BigNumber.from("300"),
-      ethers.BigNumber.from("32"),
-      ethers.BigNumber.from("800"),
-      ethers.BigNumber.from("24"),
+      [ethers.BigNumber.from("500"),ethers.BigNumber.from("800"),ethers.BigNumber.from("300")],
+      [ethers.BigNumber.from("32"),ethers.BigNumber.from("36"),ethers.BigNumber.from("24")],
     );
 
     const escrow = await HolderFactory.getHolder("Honduras Agriculture Project");
@@ -63,9 +59,9 @@ describe("Lucidity Full Feature Test", function () {
       owner
     );
     console.log("Project Name: ", await firstEscrow.projectName())
-    const budgets = await firstEscrow.budgetsOne()
+    const budgets = await firstEscrow.getBudgets()
     console.log(`budgets: ${budgets.toString()} dai`)
-    const timeline = await firstEscrow.timelineOne()
+    const timeline = await firstEscrow.getTimelines()
     console.log(`timeline: ${timeline.toString()} months`)
 
     //deploy project
@@ -320,6 +316,13 @@ describe("Lucidity Full Feature Test", function () {
         [ethers.BigNumber.from("1"), ethers.BigNumber.from("0")]
       );
     console.log("audit passed, result sent");
+    //checking condition was reported
+    const reportStatus = await CT.filter.ConditionResolution(
+      "0x0000000000000000000000000000000000000000000000000000000000000001",
+      auditor.getAddress()
+  );
+      console.log(reportStatus)
+
 
     //9) redemption with redeemPositions(dai,parent(all 0's again), conditionId, indexset (outcome slots as index set so [1,0,0] is 0)). CT now get burned.
     await CT.connect(bidder).redeemPositions(

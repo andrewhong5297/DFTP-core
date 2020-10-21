@@ -75,12 +75,8 @@ describe("Lucidity Full Feature Test", function () {
       owner.getAddress(),
       owner.getAddress(),
       owner.getAddress(),
-      ethers.BigNumber.from("500"),
-      ethers.BigNumber.from("36"),
-      ethers.BigNumber.from("300"),
-      ethers.BigNumber.from("32"),
-      ethers.BigNumber.from("800"),
-      ethers.BigNumber.from("24"),
+      [ethers.BigNumber.from("500"),ethers.BigNumber.from("800"),ethers.BigNumber.from("300")],
+      [ethers.BigNumber.from("32"),ethers.BigNumber.from("36"),ethers.BigNumber.from("24")],
       overrides
     );
 
@@ -91,6 +87,11 @@ describe("Lucidity Full Feature Test", function () {
       abiEscrow,
       owner
     );
+    console.log("Project Name: ", await firstEscrow.projectName())
+    const budgets = await firstEscrow.getBudgets()
+    console.log(`budgets: ${budgets.toString()} dai`)
+    const timeline = await firstEscrow.getTimelines()
+    console.log(`timeline: ${timeline.toString()} months`)
 
     //deploy project
     await TokenFactory.connect(owner).deployNewProject(
@@ -137,12 +138,8 @@ describe("Lucidity Full Feature Test", function () {
       owner.getAddress(),
       owner.getAddress(),
       owner.getAddress(),
-      ethers.BigNumber.from("500"),
-      ethers.BigNumber.from("36"),
-      ethers.BigNumber.from("300"),
-      ethers.BigNumber.from("32"),
-      ethers.BigNumber.from("800"),
-      ethers.BigNumber.from("24"),
+      [ethers.BigNumber.from("300"),ethers.BigNumber.from("400"),ethers.BigNumber.from("600")],
+      [ethers.BigNumber.from("20"),ethers.BigNumber.from("26"),ethers.BigNumber.from("30")],
       overrides
     );
 
@@ -153,6 +150,11 @@ describe("Lucidity Full Feature Test", function () {
       abiEscrow,
       owner
     );
+    console.log("Project Name: ", await firstEscrow.projectName())
+    const budgets = await firstEscrow.getBudgets()
+    console.log(`budgets: ${budgets.toString()} dai`)
+    const timeline = await firstEscrow.getTimelines()
+    console.log(`timeline: ${timeline.toString()} months`)
 
     //deploy project
     await TokenFactory.connect(owner).deployNewProject(

@@ -38,13 +38,16 @@ export const AuditorPage = (props) => {
         
         let milestone;
         if(currentMilestone=="0x0000000000000000000000000000000000000000000000000000000000000001"){
-          milestone = await props.escrow.budgetsOne()
+          milestone = await props.escrow.getBudgets()
+          milestone = milestone[0]
         }
         if(currentMilestone=="0x0000000000000000000000000000000000000000000000000000000000000002"){
-          milestone = await props.escrow.budgetsTwo()
+          milestone = await props.escrow.getBudgets()
+          milestone = milestone[1]
         }
         if(currentMilestone=="0x0000000000000000000000000000000000000000000000000000000000000003"){
-          milestone = await props.escrow.budgetsThree()
+          milestone = await props.escrow.getBudgets()
+          milestone = milestone[2]
         }
         const totalValueInEscrow = await props.escrow.totalValue()
         console.log(parseInt(milestone.toString()))
@@ -156,18 +159,24 @@ export const AuditorPage = (props) => {
       }
 
       const showData = async () => {
-        let milestone, timeline
+        let milestone, timeline;
         if(currentMilestone=="0x0000000000000000000000000000000000000000000000000000000000000001"){
-          milestone = await props.escrow.budgetsOne()
-          timeline = await props.escrow.timelineOne()
+          milestone = await props.escrow.getBudgets()
+          timeline = await props.escrow.getTimelines()
+          milestone = milestone[0]
+          timeline = timeline[0]
         }
         if(currentMilestone=="0x0000000000000000000000000000000000000000000000000000000000000002"){
-          milestone = await props.escrow.budgetsTwo()
-          timeline = await props.escrow.timelineTwo()
+          milestone = await props.escrow.getBudgets()
+          timeline = await props.escrow.getTimelines()
+          milestone = milestone[1]
+          timeline = timeline[1]
         }
         if(currentMilestone=="0x0000000000000000000000000000000000000000000000000000000000000003"){
-          milestone = await props.escrow.budgetsThree()
-          timeline = await props.escrow.timelineThree()
+          milestone = await props.escrow.getBudgets()
+          timeline = await props.escrow.getTimelines()
+          milestone = milestone[2]
+          timeline = timeline[2]
         }
 
         setDataBoard(

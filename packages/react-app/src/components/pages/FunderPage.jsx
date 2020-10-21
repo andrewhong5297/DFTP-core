@@ -2,14 +2,12 @@ import React, { useState, Component } from 'react';
 import { useForm } from "react-hook-form";
 import { ethers } from "ethers";
 import { Button, Alert } from "react-bootstrap"
-import { TransactionPopUp } from "../rimble/transaction"
-const awaitTransactionMined = require ('await-transaction-mined');
+
 export const FunderPage = (props) => {
     const welcome = "Funder role has been selected"
 
     const { register, handleSubmit } = useForm();
     const [error, setError] = useState()
-    const [buyStatus, setStatus] = useState(null)
 
     const buyOne = async (formData) => {
         const owner = props.provider.getSigner();
@@ -77,7 +75,6 @@ export const FunderPage = (props) => {
                     <input type="text" name="year" ref={register} />
                     </label>
                     <input type="submit" value="Submit" />
-                    {buyStatus}
                     {error}
                 </form>
             </React.Fragment>

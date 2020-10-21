@@ -2,18 +2,43 @@
 pragma solidity >=0.6.0 <0.7.0;
 import "@openzeppelin/contracts/utils/Counters.sol";
 
+interface IHolderFactory {
+    function deployNewHolder(
+        string calldata _name,
+        address _CTtokenAddress,
+        address _ERC20token,
+        address _owner,
+        address _projectBidder,
+        address _projectAuditor,
+        uint256[] calldata _budgets,
+        uint256[] calldata _timelines
+    ) external returns (address);
+}
+
+interface ITokenFactory {
+    function deployNewProject(
+        string calldata _name,
+        string calldata _symbol,
+        string calldata baseURI,
+        address _ERC20token,
+        address _projectOwner,
+        address _projectBidder,
+        address _auditors
+    ) external returns (address);
+}
+
 contract ProjectTrackerFactory {
     using Counters for Counters.Counter;
     Counters.Counter public nonce; // acts as unique identifier for minted NFTs
 
     ProjectNegotiationTracker[] public projects;
 
-    event ProjectCreated(address tokenAddress);
-
     mapping(string => uint256) public nameToProjectIndex;
 
     function deployNewProject(
         address _owner,
+        address _HolderFactory,
+        address _TokenFactory,
         string memory _name,
         string memory _milestones,
         uint256[] memory _timeline,
@@ -23,6 +48,8 @@ contract ProjectTrackerFactory {
         require(nameToProjectIndex[_name] == 0, "Name has already been taken");
         ProjectNegotiationTracker newProject = new ProjectNegotiationTracker(
             _owner,
+            _HolderFactory,
+            _TokenFactory,
             _name,
             _milestones,
             _timeline,
@@ -32,8 +59,6 @@ contract ProjectTrackerFactory {
 
         nonce.increment(); //start at 1
         nameToProjectIndex[_name] = nonce.current();
-
-        emit ProjectCreated(address(newProject));
 
         //should create safe in here too, and add an address variable for the safe.
         return address(newProject);
@@ -68,10 +93,15 @@ contract ProjectNegotiationTracker {
     uint256[] public milestoneTimelineMonths;
     uint256[] public milestoneBudget;
 
+    ITokenFactory private TF;
+    ITokenFactory private HF;
+
     event currentTermsApproved(address approvedBidder);
 
     constructor(
         address _owner,
+        address _HolderFactory,
+        address _TokenFactory,
         string memory _name,
         string memory _milestones,
         uint256[] memory _timeline,
@@ -82,6 +112,8 @@ contract ProjectNegotiationTracker {
         milestones = _milestones;
         milestoneTimelineMonths = _timeline;
         milestoneBudget = _budgets;
+        TF = ITokenFactory(_TokenFactory);
+        HF = ITokenFactory(_HolderFactory);
     }
 
     mapping(address => uint256[]) public BidderToTimeline;

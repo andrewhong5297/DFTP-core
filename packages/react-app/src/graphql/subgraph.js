@@ -8,8 +8,8 @@ import { gql } from "apollo-boost";
 // $ yarn deploy-local
 // if you get errors, run docker-compose down --volume or rd /s /q "data/postgres"
 export const GET_FUNDERS = gql`
-{
-  projects(first: 10) {
+query projects($projectName : String!) {
+  projects(where: {name: $projectName}) {
     id
     name
     fundingTokens(first: 10) {
