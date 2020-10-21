@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 import { Button, Alert } from "react-bootstrap"
 import Select from 'react-select'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import CPK, { EthersAdapter } from 'contract-proxy-kit';
 
 export const AuditorPage = (props) => {
     const welcome = "Auditor role has been selected"
@@ -19,7 +20,7 @@ export const AuditorPage = (props) => {
       { value: '0x0000000000000000000000000000000000000000000000000000000000000002', label: 'Milestone Two' },
       { value: '0x0000000000000000000000000000000000000000000000000000000000000003', label: 'Milestone Three' }
     ]
-    
+
     const onSelected = (s) => {
       setSelected(false)
       setMilestone(s.value)
@@ -28,20 +29,24 @@ export const AuditorPage = (props) => {
 
     const setConditions = async (formData) => {
         const owner = props.provider.getSigner();
-        
+            
+        // const ethLibAdapter = new EthersAdapter({ ethers, signer: owner });
+        // const cpk = await CPK.create({ ethLibAdapter });
+        // console.log(cpk.address)
+
         try{
         
         let milestone;
         if(currentMilestone=="0x0000000000000000000000000000000000000000000000000000000000000001"){
-          milestone = await props.firstEscrow.budgetsOne()
+          milestone = await props.escrow.budgetsOne()
         }
         if(currentMilestone=="0x0000000000000000000000000000000000000000000000000000000000000002"){
-          milestone = await props.firstEscrow.budgetsTwo()
+          milestone = await props.escrow.budgetsTwo()
         }
         if(currentMilestone=="0x0000000000000000000000000000000000000000000000000000000000000003"){
-          milestone = await props.firstEscrow.budgetsThree()
+          milestone = await props.escrow.budgetsThree()
         }
-        const totalValueInEscrow = await props.firstEscrow.totalValue()
+        const totalValueInEscrow = await props.escrow.totalValue()
         console.log(parseInt(milestone.toString()))
         console.log(parseInt(totalValueInEscrow.toString()))
 
@@ -51,12 +56,12 @@ export const AuditorPage = (props) => {
 
         //1 (requires approval)
         conditionId = await props.CT.connect(owner).getConditionId(
-            props.firstEscrow.address,
+            props.escrow.address,
             currentMilestone,
             2
           );
         await props.CT.connect(owner).prepareCondition(
-          props.firstEscrow.address,
+          props.escrow.address,
           currentMilestone,
           2
         );
@@ -84,7 +89,7 @@ export const AuditorPage = (props) => {
         );
         
         //4 (requires approval)
-        await props.firstEscrow
+        await props.escrow
           .connect(owner)
           .callSplitPosition(
               props.Dai.address,
@@ -95,7 +100,7 @@ export const AuditorPage = (props) => {
           );
         
         //5 (requires approval)
-        await props.firstEscrow.connect(owner).transferCTtoBidder(ApprovalOnePosition);
+        await props.escrow.connect(owner).transferCTtoBidder(ApprovalOnePosition);
 
         setError(
           <Alert variant="success" onClose={() => setError(null)} dismissible>
@@ -122,7 +127,7 @@ export const AuditorPage = (props) => {
     const reportAudit = async (formData) => {
       try {
         const owner = props.provider.getSigner();
-        await props.firstEscrow
+        await props.escrow
             .connect(owner)
             .callReportPayouts(
               currentMilestone,
@@ -153,16 +158,16 @@ export const AuditorPage = (props) => {
       const showData = async () => {
         let milestone, timeline
         if(currentMilestone=="0x0000000000000000000000000000000000000000000000000000000000000001"){
-          milestone = await props.firstEscrow.budgetsOne()
-          timeline = await props.firstEscrow.timelineOne()
+          milestone = await props.escrow.budgetsOne()
+          timeline = await props.escrow.timelineOne()
         }
         if(currentMilestone=="0x0000000000000000000000000000000000000000000000000000000000000002"){
-          milestone = await props.firstEscrow.budgetsTwo()
-          timeline = await props.firstEscrow.timelineTwo()
+          milestone = await props.escrow.budgetsTwo()
+          timeline = await props.escrow.timelineTwo()
         }
         if(currentMilestone=="0x0000000000000000000000000000000000000000000000000000000000000003"){
-          milestone = await props.firstEscrow.budgetsThree()
-          timeline = await props.firstEscrow.timelineThree()
+          milestone = await props.escrow.budgetsThree()
+          timeline = await props.escrow.timelineThree()
         }
 
         setDataBoard(

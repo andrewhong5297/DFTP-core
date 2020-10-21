@@ -91,32 +91,7 @@ function App() {
   //   console.log("SETTING ROUTE", window.location.pathname)
   //   setRoute(window.location.pathname)
   // }, [window.location.pathname]);
-  
-  //theGraph API requests
-  const { loading, gqlerror, data } = useQuery(GET_FUNDERS);
-  const [ funderList, setList ] = useState("No funders yet, be the first one!")
-  const queryResult = () => {
-    if (loading) console.log("loading")
-    if (gqlerror) console.log("error")
-    else {
-      console.log(data)
-        //https://www.apollographql.com/docs/react/get-started/
-        setList(data.fundingTokens.map(({ id, owner, fundingvalue, tenor}) => (
-        <div>
-          <div>Project Address: {data.projects.projectAddress}</div>
-          <div>Token id: {id}</div>
-          <div>Owner: {owner}</div> 
-          <div>Funded amount: {fundingvalue.toString()} dai</div>
-          <div>Funded tenor: {tenor.toString()} years</div>
-        </div>
-        )))
-    }
-  }
     
-  //Various Buttons
-  const [projectNotConnected, setConnection] = useState(true);
-  const { register, handleSubmit } = useForm(); //for project name submission
-
   //initial contract links
   let Dai = new ethers.Contract(
     "0x5D49B56C954D11249F59f03287619bE5c6174879",
@@ -144,18 +119,18 @@ function App() {
 
   //update after project name search
   const [error, setError] = useState()
-  const [firstEscrow, setEscrow] = useState(null);
-  const [firstProjectContract, setProject] = useState(null);
+  const [projectNotConnected, setConnection] = useState(true);
+  const { register, handleSubmit } = useForm(); //for project name submission
+
+  const [ProjectName, setProjectName] = useState(null);
+  const [Escrow, setEscrow] = useState(null);
+  const [Project, setProject] = useState(null);
   const updateContracts = async (formData) => {
     console.log("searching project name: ", formData.value)
     
     try {
       const escrow = await HolderFactory.getHolder(formData.value);
-      console.log("is await failing?")
-      console.log(escrow.projectAddress)
       const project = await TokenFactory.getProject(formData.value);
-      console.log("it isnt failing?")
-      console.log(project.projectAddress)
 
       setEscrow(await new ethers.Contract(
         escrow.projectAddress,
@@ -170,6 +145,7 @@ function App() {
       ))
 
       setConnection(false) //enables buttons
+      setProjectName(formData.value)
       setError(
       <Alert variant="success" onClose={() => setError(null)} dismissible>
           <Alert.Heading>Link Worked</Alert.Heading>
@@ -191,6 +167,38 @@ function App() {
       }
     }
 
+  //theGraph API requests
+  const { loading, gqlerror, data } = useQuery(GET_FUNDERS, { variables: {projectName: ProjectName}});
+  const [ funderList, setList ] = useState("No funders yet, be the first one!")
+  const queryResult = () => {
+    if (loading) console.log("loading")
+    if (gqlerror) console.log("error")
+    else {
+      console.log(data)
+        //https://www.apollographql.com/docs/react/get-started/
+        setList(data.fundingTokens.map(({ id, owner, fundingvalue, tenor}) => (
+        <div>
+          <div>Project Address: {data.projects.projectAddress}</div>
+          <div>Token id: {id}</div>
+          <div>Owner: {owner}</div> 
+          <div>Funded amount: {fundingvalue.toString()} dai</div>
+          <div>Funded tenor: {tenor.toString()} years</div>
+        </div>
+        )))
+    }
+  }
+  
+  //setting dai balance at bottom left
+  const [daibalance, setDaiBalance] = useState(["  loading balance..."]);
+  const updateDaiBalance = async () => {
+    const daibalance = await Dai.balanceOf(address);
+    console.log(daibalance.toString())
+    setDaiBalance(`  Dai balance: ${daibalance.toString()}`)
+  }
+
+  //openlaw link
+  const link = <a href="https://lib.openlaw.io/web/default/template/LucidityRFP"> fill out RFP first</a>;   
+
   //roles dropdown
   const [PageState, setPage] = useState([<HomePage />])
   const handleSelect=(e)=>{
@@ -199,16 +207,16 @@ function App() {
       setPage(<FunderPage 
         address={address} 
         provider ={userProvider} 
-        firstEscrow = {firstEscrow}
-        firstProjectContract = {firstProjectContract}
+        escrow = {Escrow}
+        Project = {Project}
         Dai = {Dai}/>)
     }
     if (e=="BidderPage") {
       setPage(<BidderPage 
         address={address} 
         provider ={userProvider} 
-        firstEscrow = {firstEscrow}
-        firstProjectContract = {firstProjectContract}
+        escrow = {Escrow}
+        Project = {Project}
         Dai = {Dai}
         CT={CT}/>)
     }
@@ -216,8 +224,8 @@ function App() {
       setPage(<AuditorPage 
         address={address} 
         provider ={userProvider} 
-        firstEscrow = {firstEscrow}
-        firstProjectContract = {firstProjectContract}
+        escrow = {Escrow}
+        Project = {Project}
         Dai = {Dai}
         CT={CT}/>)
     }
@@ -225,22 +233,12 @@ function App() {
       setPage(<OwnerPage 
         address={address} 
         provider ={userProvider} 
-        firstEscrow = {firstEscrow}
-        firstProjectContract = {firstProjectContract}
+        escrow = {Escrow}
+        Project = {Project}
         Dai = {Dai}
         CT={CT}/>)
     }
   }
-
-  //setting dai balance at bottom left
-  const [daibalance, setDaiBalance] = useState(["  loading balance..."]);
-  const updateDaiBalance = async () => {
-    const daibalance = await Dai.balanceOf(address);
-    console.log(daibalance.toString())
-    setDaiBalance(`  Dai balance: ${daibalance.toString()}`)
-  }
-  //openlaw link
-  const link = <a href="https://lib.openlaw.io/web/default/template/LucidityRFP"> fill out RFP first</a>;   
 
   return (
     <div className="App">
@@ -268,7 +266,7 @@ function App() {
                     <Col>
                     <Card>
                       <div className="cardDiv">
-                        <h6 classname="mt-1">Please {link} for new projects, otherwise search for project name below:</h6>
+                        <h6 className="mt-1">Please {link} for new projects, otherwise search for project name below:</h6>
                           <form onSubmit={handleSubmit(updateContracts)} className="">
                             <div className="input-group mb-3">
                                 <div className="input-group-append col-centered">
@@ -318,8 +316,8 @@ function App() {
                   <Buttons 
                     address={address} 
                     provider ={userProvider} 
-                    firstEscrow = {firstEscrow}
-                    firstProjectContract = {firstProjectContract}
+                    escrow = {Escrow}
+                    Project = {Project}
                     Dai = {Dai}/>
                 </div>
             </Route>

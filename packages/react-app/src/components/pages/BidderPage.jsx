@@ -24,17 +24,17 @@ export const BidderPage = (props) => {
         const owner = props.provider.getSigner();
         let milestone;
         if(currentMilestone=="0x0000000000000000000000000000000000000000000000000000000000000001"){
-          milestone = await props.firstEscrow.budgetsOne()
+          milestone = await props.escrow.budgetsOne()
         }
         if(currentMilestone=="0x0000000000000000000000000000000000000000000000000000000000000002"){
-          milestone = await props.firstEscrow.budgetsTwo()
+          milestone = await props.escrow.budgetsTwo()
         }
         if(currentMilestone=="0x0000000000000000000000000000000000000000000000000000000000000003"){
-          milestone = await props.firstEscrow.budgetsThree()
+          milestone = await props.escrow.budgetsThree()
         }
         try {
             const conditionId = await props.CT.connect(owner).getConditionId(
-            props.firstEscrow.address,
+            props.escrow.address,
             currentMilestone,
             2
             );

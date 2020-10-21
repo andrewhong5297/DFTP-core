@@ -7,13 +7,13 @@ export const OwnerPage = (props) => {
     const [textArea, setText] = useState("loading...")
 
     const getProjectDetails= async () => {
-        projectName = await props.firstEscrow.projectName()
-        const budget1 = await props.firstEscrow.budgetsOne()
-        const timeline1 = await props.firstEscrow.timelineOne()
-        const budget2 = await props.firstEscrow.budgetsTwo()
-        const timeline2 = await props.firstEscrow.timelineTwo()
-        const budget3 = await props.firstEscrow.budgetsThree()
-        const timeline3 = await props.firstEscrow.timelineThree()
+        projectName = await props.escrow.projectName()
+        const budget1 = await props.escrow.budgetsOne()
+        const timeline1 = await props.escrow.timelineOne()
+        const budget2 = await props.escrow.budgetsTwo()
+        const timeline2 = await props.escrow.timelineTwo()
+        const budget3 = await props.escrow.budgetsThree()
+        const timeline3 = await props.escrow.timelineThree()
 
         setText(
             <div>

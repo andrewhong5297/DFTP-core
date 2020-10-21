@@ -7,7 +7,7 @@ import { SecurityToken as SecurityTokenTemplate } from '../generated/templates' 
 export function handleNewProject(event: NewProject): void {
   let newProject = new Project(event.params.baseURI)
   log.info("New project at address: {}", [event.params.project.toHex()])
-  newProject.id = event.params.baseURI
+  newProject.id = event.params.name
   newProject.name = event.params.name
   newProject.projectAddress = event.params.project.toHex()
   newProject.ownerAddress = event.params.owner.toHex()
