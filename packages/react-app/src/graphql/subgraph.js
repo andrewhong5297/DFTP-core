@@ -11,8 +11,17 @@ export const GET_FUNDERS = gql`
 {
   fundingTokens(first: 5) {
     id
+    owner
     fundingvalue
     tenor
+  }
+  projects(first: 5) {
+    id
+    name
+    projectAddress
+    ownerAddress
+    bidderAddress
+    auditorAddress
   }
 }
 `;

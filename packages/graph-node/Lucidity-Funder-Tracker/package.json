@@ -1,5 +1,5 @@
 {
-  "name": "Lucidity-Funder-Tracker",
+  "name": "Lucidity-Funder-Tracking",
   "version": "0.1.0",
   "scripts": {
     "build-contract": "solc contracts/Gravity.sol --abi -o abis --overwrite && solc contracts/Gravity.sol --bin -o bin --overwrite",

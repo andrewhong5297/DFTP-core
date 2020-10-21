@@ -40,9 +40,9 @@ const { abi: abiDai } = require("./abis/Dai.json");
 const { abi: abiCT } = require("./abis/ConditionalTokens.json");
 
 /* IMPORTANT STEPS FOR TESTING 
-1) Start buidler node (or ganache-cli -h 0.0.0.0, if trying to use theGraph then start a docker graph-node too and deploy from lucidity-funder-tracker)
+1) Start buidler node (or ganache-cli -h 0.0.0.0, if trying to use theGraph then start a docker graph-node too)
 2) Start react app
-3) run buidler test on frontend test script (make sure your metamask mnemonic is saved in mnemonic.txt in buidler folder and add to gitignore)
+3) run buidler test on frontend test script. Change factory address in subgraph.yaml and deploy from lucidity-funder-tracking
 4) change firstproject address in subgraph.yaml and redeploy graph-node (docker-compose up) and subgraph (yarn create-local and yarn deploy-local)
 5) may have to change contract addresses below since we all have different metamask accounts. You will have to restart the app to relink them. 
 6) may have to reset metamask account to sync nonce
@@ -103,6 +103,7 @@ function App() {
         //https://www.apollographql.com/docs/react/get-started/
         setList(data.fundingTokens.map(({ id, owner, fundingvalue, tenor}) => (
         <div>
+          <div>Project Address: {data.projects.projectAddress}</div>
           <div>Token id: {id}</div>
           <div>Owner: {owner}</div> 
           <div>Funded amount: {fundingvalue.toString()} dai</div>

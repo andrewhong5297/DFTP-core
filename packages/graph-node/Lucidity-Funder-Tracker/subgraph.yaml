@@ -8,7 +8,7 @@ dataSources:
     name: TokenFactory
     network: mainnet
     source:
-      address: "0xFccc25BB40d52ab78b4736D4576D7ff594103C45"
+      address: "0x83Fbd04ccce2AeDd94E8e9783De26FE5D5D8a26B"
       abi: TokenFactory
       startBlock: 1
     mapping:
