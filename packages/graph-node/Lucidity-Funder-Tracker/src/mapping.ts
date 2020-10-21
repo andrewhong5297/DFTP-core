@@ -13,17 +13,24 @@ export function handleNewProject(event: NewProject): void {
   newProject.ownerAddress = event.params.owner.toHex()
   newProject.bidderAddress = event.params.bidder.toHex()
   newProject.auditorAddress = event.params.auditor.toHex()
+  newProject.fundingTokens.push("one")
   newProject.save()
 
-  SecurityTokenTemplate.create(event.params.project) //tracks based on address?
+  SecurityTokenTemplate.create(event.params.project) //tracks based on address
 }
 
 export function handleNewFunding(event: newFunder): void {
+  //we need to connect it here
+  let projectID = event.address.toHexString()
+  let project = Project.load(projectID)
+
   let fundingToken = new FundingToken(event.params.funder.toHex())
   log.info("New funder at address: {}", [event.params.funder.toHex()])
   fundingToken.id = event.params.tokenId.toHex()
+  fundingToken.projectAddress = event.address.toHex()
   fundingToken.owner = event.params.funder.toHex()
   fundingToken.fundingvalue = event.params.value
   fundingToken.tenor = event.params.tenor
-  fundingToken.save()
+  fundingToken.save() //still save in case we want to query all tokens for something
+  project.fundingTokens.push(fundingToken.owner)
 }

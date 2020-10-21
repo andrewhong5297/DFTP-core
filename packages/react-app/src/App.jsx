@@ -40,12 +40,13 @@ const { abi: abiDai } = require("./abis/Dai.json");
 const { abi: abiCT } = require("./abis/ConditionalTokens.json");
 
 /* IMPORTANT STEPS FOR TESTING 
-1) Start buidler node (or ganache-cli -h 0.0.0.0, if trying to use theGraph then start a docker graph-node too)
-2) Start react app
-3) run buidler test on frontend test script. Change factory address in subgraph.yaml and deploy from lucidity-funder-tracking
-4) change firstproject address in subgraph.yaml and redeploy graph-node (docker-compose up) and subgraph (yarn create-local and yarn deploy-local)
-5) may have to change contract addresses below since we all have different metamask accounts. You will have to restart the app to relink them. 
-6) may have to reset metamask account to sync nonce
+1) Start buidler node with yarn chain (or ganache-cli -h 0.0.0.0). Take one of the private keys and place it in the faucet address in test contract (line 25)
+2) Start a graph node with "docker-compose up" in graph-node/docker
+2) Start react app with yarn start 
+3) run buidler test on frontend test script with "yarn test" or "npx buidler test". Make sure you have your metamask mnemonic.txt file in buidler folder
+4) the console of the test will print "tokenfactory address" which should go into subgraph.yaml address on line 11. Then deploy subgraph (run "yarn create-local" and "yarn deploy-local" in lucidity-funders-tracking folder)
+5) You may have to change contract addresses lines 97-119 since we all have different metamask accounts. You will have to restart the app to relink them. 
+6) Reset metamask account to sync nonce after running test
 7) click give self 100 dai, if this works then everything should work now. 
 */
 

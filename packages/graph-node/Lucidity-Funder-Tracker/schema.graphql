@@ -1,5 +1,6 @@
 type FundingToken @entity {
   id: ID!
+  projectAddress: ID!
   owner: ID!
   fundingvalue: BigInt!
   tenor: BigInt!
@@ -12,4 +13,5 @@ type Project @entity {
   ownerAddress: ID!
   bidderAddress: ID!
   auditorAddress: ID!
+  fundingTokens: [FundingToken!]
 }

@@ -42,6 +42,15 @@ export class FundingToken extends Entity {
     this.set("id", Value.fromString(value));
   }
 
+  get projectAddress(): string {
+    let value = this.get("projectAddress");
+    return value.toString();
+  }
+
+  set projectAddress(value: string) {
+    this.set("projectAddress", Value.fromString(value));
+  }
+
   get owner(): string {
     let value = this.get("owner");
     return value.toString();
@@ -143,5 +152,22 @@ export class Project extends Entity {
 
   set auditorAddress(value: string) {
     this.set("auditorAddress", Value.fromString(value));
+  }
+
+  get fundingTokens(): Array<string> | null {
+    let value = this.get("fundingTokens");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set fundingTokens(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("fundingTokens");
+    } else {
+      this.set("fundingTokens", Value.fromStringArray(value as Array<string>));
+    }
   }
 }
