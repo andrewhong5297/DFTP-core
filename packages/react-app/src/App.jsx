@@ -120,11 +120,11 @@ function App() {
     userProvider
   );
 
-  let OpenLawFactory = new ethers.Contract(
-    "0x5D49B56C954D11249F59f03287619bE5c6174879",
-    abiOLF,
-    userProvider
-  );
+  // let OpenLawFactory = new ethers.Contract(
+  //   "0x5D49B56C954D11249F59f03287619bE5c6174879",
+  //   abiOLF,
+  //   userProvider
+  // );
   
   //update after project name search
   const [error, setError] = useState()
@@ -281,9 +281,7 @@ function App() {
                     <Card>
                       <div className="cardDiv">
                         <OpenLawForm 
-                          role = {RoleState}
                           provider ={userProvider} 
-                          OLF = {OpenLawFactory}
                           address={address} 
                           provider ={userProvider} 
                           TokenFactory = {TokenFactory}

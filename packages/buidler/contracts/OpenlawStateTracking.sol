@@ -129,10 +129,11 @@ contract ProjectNegotiationTracker {
             ownerApproval == false,
             "another proposal has already been accepted"
         );
-        require(msg.sender != owner, "owner cannot create a bid");
+        //require(msg.sender != owner, "owner cannot create a bid");
         BidderToTimeline[msg.sender] = _timelines;
         BidderToBudgets[msg.sender] = _budgets;
         BidderProposalStatus[msg.sender] = false;
+        all_bidders.push(msg.sender);
     }
 
     //called by owner approval submit
@@ -176,9 +177,13 @@ contract ProjectNegotiationTracker {
     function loadOwnerTerms()
         external
         view
-        returns (uint256[] memory _timelines, uint256[] memory _budgets)
+        returns (
+            string memory _milestones,
+            uint256[] memory _timelines,
+            uint256[] memory _budgets
+        )
     {
-        return (budgetsOwner, timelinesOwner);
+        return (milestones, budgetsOwner, timelinesOwner);
     }
 
     //loads all bidders
