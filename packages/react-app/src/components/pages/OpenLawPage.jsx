@@ -159,16 +159,17 @@ export const OpenLawForm = (props) => {
           console.log(all_address_proposals)
           
           changeForm(
-            all_address_proposals.map(({ index, _budgets, _timelines}) => (
-                <button onClick={() => finalApproval(all_addresses[0])} id={all_addresses[0]}>
+            all_address_proposals.map(( {_budgets, _timelines}, index) => {
+                return(
+                <button onClick={() => finalApproval(all_addresses[index])} id={all_addresses[index]}>
                     <div>
-                    <div>Proposer: {0} {all_addresses[0]}</div>
-                    <div>Project Budget: {_budgets[0].toString()} dai, {_budgets[1].toString()} dai, {_budgets[2].toString()} dai</div>
-                    <div>Project Timeline: {_timelines[0].toString()} months, {_timelines[1].toString()} months, {_timelines[2].toString()} months</div>
+                        <div>Proposer: {index} {all_addresses[index]}</div>
+                        <div>Project Budget: {_budgets[0].toString()} dai, {_budgets[1].toString()} dai, {_budgets[2].toString()} dai</div>
+                        <div>Project Timeline: {_timelines[0].toString()} months, {_timelines[1].toString()} months, {_timelines[2].toString()} months</div>
                     </div>
                 </button>
-                ))
-          )
+                )
+            }))
           //changeForm() print all in buttons, where click sends off finalApproval(projectContract, bidderaddress from loop id?)
         }
         if (role == "bidder"){
