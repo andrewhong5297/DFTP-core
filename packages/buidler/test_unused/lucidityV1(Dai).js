@@ -317,9 +317,11 @@ describe("Lucidity Full Feature Test", function () {
       );
     console.log("audit passed, result sent");
     //checking condition was reported
-    const reportStatus = await CT.filter.ConditionResolution(
+    const reportStatus = await CT.connect(bidder).filter.ConditionResolution(
+      conditionOne,
       "0x0000000000000000000000000000000000000000000000000000000000000001",
-      auditor.getAddress()
+      2,
+      [ethers.BigNumber.from("1"), ethers.BigNumber.from("0")]
   );
       console.log(reportStatus)
 

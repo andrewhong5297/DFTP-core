@@ -40,6 +40,7 @@ contract ProjectTrackerFactory {
         address _HolderFactory,
         address _TokenFactory,
         string memory _name,
+        string memory _symbol,
         string memory _milestones,
         uint256[] memory _timeline,
         uint256[] memory _budgets
@@ -51,6 +52,7 @@ contract ProjectTrackerFactory {
             _HolderFactory,
             _TokenFactory,
             _name,
+            _symbol,
             _milestones,
             _timeline,
             _budgets
@@ -68,19 +70,12 @@ contract ProjectTrackerFactory {
         public
         view
         returns (address projectAddress, string memory name)
-    //uint256[] memory _timeline,
-    //uint256[] memory _budgets
     {
 
             ProjectNegotiationTracker selectedProject
          = projects[nameToProjectIndex[_name] - 1];
 
-        return (
-            address(selectedProject),
-            selectedProject.projectName()
-            //selectedProject.milestoneTimelineMonths(),
-            //selectedProject.milestoneBudget()
-        );
+        return (address(selectedProject), selectedProject.projectName());
     }
 }
 
@@ -88,13 +83,14 @@ contract ProjectNegotiationTracker {
     address public owner;
     bool public ownerApproval = false;
     string public projectName;
+    string public symbol;
     string public milestones;
     address public winningBidder;
-    uint256[] public milestoneTimelineMonths;
-    uint256[] public milestoneBudget;
+    uint256[] public timelinesOwner;
+    uint256[] public budgetsOwner;
 
     ITokenFactory private TF;
-    ITokenFactory private HF;
+    IHolderFactory private HF;
 
     event currentTermsApproved(address approvedBidder);
 
@@ -103,54 +99,96 @@ contract ProjectNegotiationTracker {
         address _HolderFactory,
         address _TokenFactory,
         string memory _name,
+        string memory _symbol,
         string memory _milestones,
-        uint256[] memory _timeline,
+        uint256[] memory _timelines,
         uint256[] memory _budgets
     ) public {
         owner = _owner;
         projectName = _name;
+        symbol = _symbol;
         milestones = _milestones;
-        milestoneTimelineMonths = _timeline;
-        milestoneBudget = _budgets;
+        timelinesOwner = _timelines;
+        budgetsOwner = _budgets;
         TF = ITokenFactory(_TokenFactory);
-        HF = ITokenFactory(_HolderFactory);
+        HF = IHolderFactory(_HolderFactory);
     }
 
     mapping(address => uint256[]) public BidderToTimeline;
     mapping(address => uint256[]) public BidderToBudgets;
     mapping(address => bool) public BidderProposalStatus;
 
+    //called by bidder submit
     function newBidderTerms(
-        uint256[] calldata timeline,
-        uint256[] calldata budgets
+        uint256[] calldata _timelines,
+        uint256[] calldata _budgets
     ) external {
         require(
             ownerApproval == false,
             "another proposal has already been accepted"
         );
         require(msg.sender != owner, "owner cannot create a bid");
-        BidderToTimeline[msg.sender] = timeline;
-        BidderToBudgets[msg.sender] = budgets;
+        BidderToTimeline[msg.sender] = _timelines;
+        BidderToBudgets[msg.sender] = _budgets;
         BidderProposalStatus[msg.sender] = false;
     }
 
+    //called by owner approval submit
+    function approveBidderTerms(
+        address _bidder,
+        address _CTaddress,
+        address _ERC20address,
+        address auditor
+    ) external {
+        require(msg.sender == owner, "Only project owner can approve terms");
+        ownerApproval = true;
+        BidderProposalStatus[_bidder] = true;
+        winningBidder = _bidder;
+
+        //deploy holder
+        HF.deployNewHolder(
+            projectName,
+            _CTaddress,
+            _ERC20address,
+            owner,
+            _bidder,
+            auditor,
+            BidderToBudgets[msg.sender],
+            BidderToTimeline[msg.sender]
+        );
+
+        TF.deployNewProject(
+            projectName,
+            symbol,
+            "fillInWithIPFSHash",
+            _ERC20address,
+            owner,
+            _bidder,
+            auditor
+        );
+
+        emit currentTermsApproved(_bidder);
+    }
+
+    //loads owner terms for bidder to see
+    function loadOwnerTerms()
+        external
+        view
+        returns (uint256[] memory _timelines, uint256[] memory _budgets)
+    {
+        return (budgetsOwner, timelinesOwner);
+    }
+
+    //loads bidder terms for owner to see
     function loadBidderTerms(address _bidder)
         external
         view
-        returns (uint256[] memory timeline, uint256[] memory budgets)
+        returns (uint256[] memory _timelines, uint256[] memory _budgets)
     {
         require(
             msg.sender == owner,
             "Only project owner can see proposed terms"
         );
         return (BidderToTimeline[_bidder], BidderToBudgets[_bidder]);
-    }
-
-    function approveBidderTerms(address _bidder) external {
-        require(msg.sender == owner, "Only project owner can approve terms");
-        ownerApproval = true;
-        BidderProposalStatus[_bidder] = true;
-        winningBidder = _bidder;
-        emit currentTermsApproved(_bidder);
     }
 }

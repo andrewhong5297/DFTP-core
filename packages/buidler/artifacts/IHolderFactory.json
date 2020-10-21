@@ -34,34 +34,14 @@
           "type": "address"
         },
         {
-          "internalType": "uint256",
-          "name": "_budgetOne",
-          "type": "uint256"
+          "internalType": "uint256[]",
+          "name": "_budgets",
+          "type": "uint256[]"
         },
         {
-          "internalType": "uint256",
-          "name": "_timelineOne",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_budgetsTwo",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_timelineTwo",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_budgetsThree",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_timelineThree",
-          "type": "uint256"
+          "internalType": "uint256[]",
+          "name": "_timelines",
+          "type": "uint256[]"
         }
       ],
       "name": "deployNewHolder",
