@@ -29,6 +29,7 @@ import { OwnerPage } from "./components/pages/OwnerPage";
 import { AuditorPage } from "./components/pages/AuditorPage";
 import { BidderPage } from "./components/pages/BidderPage";
 import { OpenLawForm } from "./components/pages/OpenLawPage";
+import { TextileTest } from "./components/pages/textileInteractionsTest";
 import { GET_FUNDERS } from "./graphql/subgraph";
 
 const { abi: abiToken } = require("./abis/SecurityToken.json");
