@@ -7,11 +7,11 @@ const { abi: abiEscrow } = require("../artifacts/HolderContract.json");
 
 use(solidity);
 
-describe("Openlaw negotiation test", function () {
+describe("Openlaw Version of Lucidity Full Feature Test", function () {
   let OpenLawFactory, Dai, HolderFactory, TokenFactory, CT;
   let owner, bidder, auditor, funder;
 
-  it("deploy contracts", async function () {
+  it("deploy factory contracts", async function () {
      [owner, bidder, auditor, funder] = await ethers.getSigners(); //jsonrpc signers from default 20 accounts with 10000 ETH each
 
     //factory contracts
@@ -87,7 +87,8 @@ describe("Openlaw negotiation test", function () {
       bidder.getAddress(),
       CT.address,
       Dai.address,
-      auditor.getAddress())
+      auditor.getAddress(),
+      "fakeURI")
     console.log("bid approved");
 
     const winningBid = await lawProjectContract.winningBidder()
