@@ -22,7 +22,7 @@ describe("Lucidity Full Feature Test", function () {
   it("deploy contracts", async function () {
     // //setup make sure to fund in faucet before running this
     const provider = new ethers.providers.JsonRpcProvider()
-    let facuet = new ethers.Wallet("0x28d1bfbbafe9d1d4f5a11c3c16ab6bf9084de48d99fbac4058bdfa3c80b2908c")
+    let facuet = new ethers.Wallet("0x28d1bfbbafe9d1d4f5a11c3c16ab6bf9084de48d99fbac4058bdfa3c80b2908c") //place private key from buidler EVM here
     facuet = await facuet.connect(provider);
     
     owner = ethers.Wallet.fromMnemonic(mnemonic());
