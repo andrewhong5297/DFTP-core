@@ -281,6 +281,7 @@ function App() {
                 <Row className="mt-1">
                     <Col>
                     <Card>
+                    <TextileTest />
                       <div className="cardDiv">
                         <OpenLawForm 
                           provider ={userProvider} 
@@ -293,7 +294,6 @@ function App() {
                       </div>
                     </Card>
                     <Card>
-                      <TextileTest />
                       <div className="cardDiv">
                         <h6 className="mt-1">Please {link} or fill out form above for new projects; otherwise search for project name below:</h6>
                           <form onSubmit={handleSubmit(updateContracts)} className="">

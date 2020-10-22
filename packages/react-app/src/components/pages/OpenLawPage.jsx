@@ -2,10 +2,13 @@ import React, { useState, Component } from 'react';
 import { useForm } from "react-hook-form";
 import { ethers } from "ethers";
 import { Button, Container, Row, Col, Card, Dropdown, Alert } from "react-bootstrap"
+import { createUserAuth, Client, PrivateKey, ThreadID, UserAuth, QueryJSON} from '@textile/hub'
+
 import "../../App.css";
 const { abi: abiOLF } = require("../../abis/ProjectTrackerFactory.json");
 const { abi: abiOL } = require("../../abis/ProjectNegotiationTracker.json");
 const { abi: abiToken } = require("../../abis/SecurityToken.json");
+
 //const { abi: abiEscrow } = require("../../abis/HolderContract.json");
 
 export const OpenLawForm = (props) => {
@@ -211,26 +214,59 @@ export const OpenLawForm = (props) => {
     }
 
     const finalApproval = async (bidderAddress) => {
-        //send to IPFS here and get a hash? 
-        //hub login andrewhong5297
-        //
-        const IPFShash = "hellotextile" //should have milestone descriptions, name, budgets/timelines, owner (user), bidder, and auditor (user) address. Brownie points for fitting it into a document
-        
+        //textile stuff
+        const expiration = new Date(Date.now() + 60 * 1000)
+        console.log(createUserAuth)
+        const userAuth = await createUserAuth("b4ubw5kjw4bnetzbld4zfqmbhaq", 
+                                        "bnlre4or4klaezixde3izvgotxbgluxlprywsrvi", 
+                                        expiration)
+        console.log(userAuth)
+        const client = await Client.withUserAuth(userAuth)
+
+        const threads = await client.listThreads()
+        console.log(threads)
+        const currentThreadID = ThreadID.fromString(threads.listList[0].id)
+        console.log(currentThreadID)
+
+        //getting data for textile
+        const [milestones, budgets, timelines] = await projectContract.connect(user).loadOwnerTerms()
+        const [budgetsB, timelinesB] = await projectContract.connect(user).loadBidderTerms(bidderAddress)
+        const ownerAddress = await user.getAddress()
+        const auditorAddress = await user.getAddress() //this needs to change in future
+
+        const created = await client.create(currentThreadID, "FinishedProjects", [{
+            _id: ownerAddress.toString(),
+            owner: ownerAddress.toString(),
+            bidder: bidderAddress.toString(),
+            auditor: auditorAddress.toString(),
+            milestones: milestones,
+            budgets: [budgetsB[0].toString(), budgetsB[1].toString(), budgetsB[2].toString()],
+            timeline: [timelinesB[0].toString(), timelinesB[1].toString(), timelinesB[2].toString()]
+          }])
+
+        console.log(created)
+
+        const IPFShash = "hellotextile" //how to hash a query? maybe hash it inside the contract? 
 
         await projectContract.connect(user).approveBidderTerms(
             bidderAddress, //this should be bidder later
             props.CT.address,
             props.Dai.address,
             user.getAddress(), //this should be auditor later
-            "hashGoesHere"
+            IPFShash
         )
 
+        changeForm(
+            <div>
+                <button onClick={setEscrowStartFunding}>Start Funding Period</button>
+            </div>
+        )
+    }
+
+    const setEscrowStartFunding = async () => {
         //setting escrow
         const escrow = await props.HolderFactory.getHolder(projectName);
-        console.log(escrow)
-
         const project = await props.TokenFactory.getProject(projectName);
-        console.log(project)
 
         const firstProjectContract = new ethers.Contract(
             project.projectAddress,
@@ -238,11 +274,14 @@ export const OpenLawForm = (props) => {
             props.userProvider
         );
 
-        console.log(firstProjectContract)
         await firstProjectContract.connect(user).setHolder(
             escrow.projectAddress);
-    }
-
+            changeForm(
+                <div>
+                    All set, good luck!
+                </div>
+            )
+        }
     return (
         <div>
             <Container>
