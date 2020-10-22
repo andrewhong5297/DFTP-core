@@ -5,17 +5,13 @@ import { Button, Alert } from "react-bootstrap"
 
 export const FunderPage = (props) => {
     const welcome = "Funder role has been selected"
-
+    let ERC20address;
     const { register, handleSubmit } = useForm();
     const [error, setError] = useState()
 
     const buyOne = async (formData) => {
+        ERC20address = await props.escrow.ERC20tokenaddress()
         const owner = props.provider.getSigner();
-        console.log(await owner.getAddress())
-        console.log("value: ", formData.value.toString())
-        console.log("tenor: ", formData.year.toString())
-        console.log("dai: ", props.Dai.address)
-        console.log("Project: ", props.Project.address)
         try {
             //funder approve, then call recieve from project
             let transaction = await props.Dai.connect(owner).approve(

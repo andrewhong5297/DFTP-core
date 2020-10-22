@@ -45,6 +45,7 @@ contract HolderContract is ERC1155Holder {
     IERC1155 private CTtoken1155; //https://forum.openzeppelin.com/t/example-on-how-to-use-erc20-token-in-another-contract/1682
     IConditionalTokens private CTtoken;
     IERC20 private ERC20token;
+    address public ERC20tokenaddress;
     address public CTtokenAddress;
     address public owner;
     address public bidder;
@@ -68,6 +69,7 @@ contract HolderContract is ERC1155Holder {
         projectName = _projectName;
         CTtoken1155 = IERC1155(_CTtokenAddress);
         CTtoken = IConditionalTokens(_CTtokenAddress);
+        ERC20tokenaddress = _DaiAddress;
         ERC20token = IERC20(_DaiAddress);
         CTtokenAddress = _CTtokenAddress;
         owner = _owner;

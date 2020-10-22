@@ -93,6 +93,8 @@ function App() {
   // }, [window.location.pathname]);
     
   //initial contract links
+  let OLfactoryAddress = "0xDe866932D277DB5B5d8c22c4f429d8045e6d4F82"
+
   let Dai = new ethers.Contract(
     "0x5D49B56C954D11249F59f03287619bE5c6174879",
     abiDai,
@@ -222,7 +224,6 @@ function App() {
 
   //roles dropdown
   const [PageState, setPage] = useState([<HomePage />])
-  const [RoleState, setRole] = useState("Owner")
   const handleSelect=(e)=>{
     console.log(`${e} has been selected`);
     if (e=="FunderPage") {
@@ -232,38 +233,22 @@ function App() {
         escrow = {Escrow}
         Project = {Project}
         Dai = {Dai}/>)
-      setRole("Funder")
     }
     if (e=="BidderPage") {
       setPage(<BidderPage 
-        address={address} 
         provider ={userProvider} 
         escrow = {Escrow}
-        Project = {Project}
-        Dai = {Dai}
         CT={CT}/>)
-      setRole("Bidder")
     }
     if (e=="AuditorPage") {
       setPage(<AuditorPage 
-        address={address} 
         provider ={userProvider} 
         escrow = {Escrow}
         Project = {Project}
-        Dai = {Dai}
         CT={CT}/>)
-      setRole("Auditor")
     }
     if (e=="OwnerPage") {
-      setPage(<OwnerPage 
-        address={address} 
-        provider ={userProvider} 
-        escrow = {Escrow}
-        Project = {Project}
-        Dai = {Dai}
-        CT={CT}
-        />)
-      setRole("Owner")
+      setPage(<OwnerPage projectName = {ProjectName}/>)
     }
   }
 
@@ -301,7 +286,7 @@ function App() {
                           TokenFactory = {TokenFactory}
                           HolderFactory = {HolderFactory}
                           CT = {CT}
-                          Dai = {Dai}/>
+                          OLfactoryAddress={OLfactoryAddress}/>
                       </div>
                     </Card>
                     <Card>
@@ -349,8 +334,10 @@ function App() {
                   </Col>
                 </Row>
               </Container>
+                
                 <div className="fixed-bottom">
-                  <Button onClick = {updateDaiBalance} size="sm">Update Dai Balance</Button>
+                  <div>{Dai.address}</div>
+                  <Button onClick = {updateDaiBalance} size="sm">Update Dai Balance:</Button>
                   {daibalance}
                 </div>
             </Route>

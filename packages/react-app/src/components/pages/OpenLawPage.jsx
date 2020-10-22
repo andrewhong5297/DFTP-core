@@ -20,14 +20,15 @@ export const OpenLawForm = (props) => {
     const user = props.provider.getSigner();
 
     let role = "owner"
-    let project, projectContract, projectName; //assigned in pullupform
+    let project, projectContract, projectName, ERC20address; //assigned in pullupform
 
     let OpenLawFactory = new ethers.Contract(
-        "0xDe866932D277DB5B5d8c22c4f429d8045e6d4F82", //insert new project deployed address
+        props.OLfactoryAddress, //insert new factory address
         abiOLF,
         props.userProvider
     );
 
+    //this is first thing either role will see
     const handleSelect = (e) => {
         role = e;
         console.log(role)
@@ -54,6 +55,9 @@ export const OpenLawForm = (props) => {
                                 </label>
                                 <label>
                                     <input type="text" name="symbol" ref={register_initial} className="form-control" placeholder="HAP" aria-describedby="button-addon2" />
+                                </label>
+                                <label>
+                                    <input type="text" name="ERC20" ref={register_initial} className="form-control" placeholder="ERC20: 0x5D49B56C954D11249F59f03287619bE5c6174879" aria-describedby="button-addon2" />
                                 </label>
                             </div>
                             <div>
@@ -115,9 +119,11 @@ export const OpenLawForm = (props) => {
         }
     }
 
+    //create project
     const sendForm = async (formData) => {
         console.log(formData)
         if (role == "owner") {
+            ERC20address = formData.ERC20; //set token to use in project as funding
             const newProject = await OpenLawFactory.connect(user).deployNewProject(
                 user.getAddress(),
                 props.HolderFactory.address,
@@ -130,6 +136,7 @@ export const OpenLawForm = (props) => {
         }
     }
 
+    //bid on project
     const sendFormBidder = async (formData) => {
         if (role == "bidder") {
             const bidderTerms = await projectContract.connect(user).newBidderTerms(
@@ -138,6 +145,7 @@ export const OpenLawForm = (props) => {
         }
     }
 
+    //this is second thing either role will see, after search is made
     const pullUpForm = async (formData) => {
         projectName = formData.value
         project = await OpenLawFactory.connect(user).getProject(projectName)
@@ -213,6 +221,7 @@ export const OpenLawForm = (props) => {
         }
     }
 
+    //deploy project
     const finalApproval = async (bidderAddress) => {
         //textile stuff
         const expiration = new Date(Date.now() + 60 * 1000)
@@ -251,7 +260,7 @@ export const OpenLawForm = (props) => {
         await projectContract.connect(user).approveBidderTerms(
             bidderAddress, //this should be bidder later
             props.CT.address,
-            props.Dai.address,
+            ERC20address,
             user.getAddress(), //this should be auditor later
             IPFShash
         )
@@ -263,6 +272,7 @@ export const OpenLawForm = (props) => {
         )
     }
 
+    //assign escrow
     const setEscrowStartFunding = async () => {
         //setting escrow
         const escrow = await props.HolderFactory.getHolder(projectName);
@@ -282,6 +292,8 @@ export const OpenLawForm = (props) => {
                 </div>
             )
         }
+        
+    //rendering
     return (
         <div>
             <Container>

@@ -13,6 +13,7 @@ export const BidderPage = (props) => {
         { value: '0x0000000000000000000000000000000000000000000000000000000000000002', label: 'Milestone Two' },
         { value: '0x0000000000000000000000000000000000000000000000000000000000000003', label: 'Milestone Three' }
       ]
+    let ERC20address;
   
     const onSelected = (s) => {
     setSelected(false)
@@ -21,6 +22,7 @@ export const BidderPage = (props) => {
     }
 
     const redeemTokens = async (formData) => {
+        ERC20address = await props.escrow.ERC20tokenaddress()
         const owner = props.provider.getSigner();
         let milestone;
         if(currentMilestone=="0x0000000000000000000000000000000000000000000000000000000000000001"){
@@ -43,7 +45,7 @@ export const BidderPage = (props) => {
             );
             console.log("redeemed for: ", conditionId)
             await props.CT.connect(owner).redeemPositions(
-                props.Dai.address,
+                ERC20address,
                 "0x0000000000000000000000000000000000000000000000000000000000000000",
                 conditionId,
                 [ethers.BigNumber.from("1")]
@@ -53,7 +55,7 @@ export const BidderPage = (props) => {
                 <Alert variant="success" onClose={() => setError(null)} dismissible>
                     <Alert.Heading>New Funds Redeemed!</Alert.Heading>
                     <p>
-                    Congrats on hitting the milestone, {milestone.toString()} dai is being sent to your wallet. (Unless you've already redeemed it!)
+                    Congrats on hitting the milestone, {milestone.toString()} tokens are being sent to your wallet.
                     </p>
                 </Alert>
             ) 

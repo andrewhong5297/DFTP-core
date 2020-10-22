@@ -87,7 +87,8 @@ describe("Openlaw negotiation test", function () {
       bidder.getAddress(),
       CT.address,
       Dai.address,
-      auditor.getAddress())
+      auditor.getAddress(),
+      "Hashhere")
     console.log("bid approved");
 
     const winningBid = await lawProjectContract.winningBidder()
@@ -112,14 +113,16 @@ describe("Openlaw negotiation test", function () {
 
     await firstProjectContract.connect(owner).setHolder(
       escrow.projectAddress);
-  
+    
+    let erc20test = await firstEscrow.ERC20tokenaddress()
+    console.log("erc20test: ", erc20test)
     console.log("Dai address: ", Dai.address);
     console.log("CT address: ", CT.address);
     console.log("firsEscrow address: ", firstEscrow.address);
     console.log("firstProjectContract address: ", firstProjectContract.address);
   });
 
-it("sell first coin and send ERC20 funds to holder contract", async function () {
+xit("sell first coin and send ERC20 funds to holder contract", async function () {
   //get first escrow and project contract again
   const escrow = await HolderFactory.getHolder("Honduras Agriculture Project");
 
@@ -210,7 +213,7 @@ it("sell first coin and send ERC20 funds to holder contract", async function () 
   );
 });
 
-it("run through Gnosis conditional token and audit report as oracle", async function () {
+xit("run through Gnosis conditional token and audit report as oracle", async function () {
   //escrow acts as oracle here
   const escrow = await HolderFactory.getHolder("Honduras Agriculture Project");
 

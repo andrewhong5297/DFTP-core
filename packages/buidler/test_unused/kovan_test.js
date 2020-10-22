@@ -70,8 +70,8 @@ describe("Kovan Deploy and Test", function () {
     // CT = new ethers.Contract("0x0eFC99FAb24Bf6c352Bd94560be3d990CA83c85c", abiCT, provider);
     // console.log("CT: ", CT.address)
 
-    // OpenLawF = new ethers.Contract("0x0eFC99FAb24Bf6c352Bd94560be3d990CA83c85c", abiOLF, provider);
-    // console.log("OpenLawF Factory: ", OpenLawF.address)
+    OpenLawF = new ethers.Contract("0x34c49018CDf4660e5ee39f392A6bf97d63351E72", abiOLF, provider);
+    console.log("OpenLawF Factory: ", OpenLawF.address)
 
     TokenFactory = new ethers.Contract("0x76b1F43850aF7eFA0B0D66450F251779a90fBF78", abiFactory, provider);
     console.log("Token Factory: ", TokenFactory.address)

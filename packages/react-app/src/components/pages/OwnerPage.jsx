@@ -5,14 +5,9 @@ const { abi: abiOL } = require("../../abis/ProjectNegotiationTracker.json");
 
 export const OwnerPage = (props) => {
     const welcome = "Owner role has been selected "
-    let projectName,budgets,timeline;
     const [textArea, setText] = useState("loading...")
     
     const getProjectDetails= async () => {
-        projectName = await props.escrow.projectName()
-        const budgets = await props.escrow.getBudgets()
-        const timelines = await props.escrow.getTimelines()
-
         //IPFS call
         const expiration = new Date(Date.now() + 60 * 1000)
         console.log(createUserAuth)
@@ -29,10 +24,9 @@ export const OwnerPage = (props) => {
         const found = await client.find(currentThreadID, "FinishedProjects", {}) //can put a queryJSON in the last part if we wanted to 
         console.log(found)
 
-        console.log(budgets[0].toString())
         setText(
             <div>
-               <h3>Project Name: {projectName}</h3>
+               <h3>Project Name: {props.projectName}</h3>
                 <Table striped bordered hover>
                 <thead>
                     <tr>

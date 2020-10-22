@@ -11,9 +11,8 @@ export const AuditorPage = (props) => {
     const [dataBoard, setDataBoard] = useState()
     const [milestoneNotSelected, setSelected] = useState(true);
     const [currentMilestone, setMilestone] = useState("0x0000000000000000000000000000000000000000000000000000000000000001");
-    const [proxyKit, setProxyKit] =useState(null)
 
-    let conditionId;
+    let conditionId, ERC20address;
     
     const options = [
       { value: '0x0000000000000000000000000000000000000000000000000000000000000001', label: 'Milestone One' },
@@ -28,11 +27,8 @@ export const AuditorPage = (props) => {
     }
 
     const setConditions = async (formData) => {
+        ERC20address = await props.escrow.ERC20tokenaddress()
         const owner = props.provider.getSigner();
-            
-        // const ethLibAdapter = new EthersAdapter({ ethers, signer: owner });
-        // const cpk = await CPK.create({ ethLibAdapter });
-        // console.log(cpk.address)
 
         try{
         
@@ -83,11 +79,11 @@ export const AuditorPage = (props) => {
         
         //3 (also a view function)
         const ApprovalOnePosition = await props.CT.connect(owner).getPositionId(
-          props.Dai.address,
+          ERC20address,
           ApproveMilestoneOne
         );
         const RejectOnePosition = await props.CT.connect(owner).getPositionId(
-          props.Dai.address,
+          ERC20address,
           RejectMilestoneOne
         );
         
@@ -95,7 +91,7 @@ export const AuditorPage = (props) => {
         await props.escrow
           .connect(owner)
           .callSplitPosition(
-              props.Dai.address,
+              ERC20address,
               "0x0000000000000000000000000000000000000000000000000000000000000000",
               conditionId,
               [1, 2],
@@ -109,7 +105,7 @@ export const AuditorPage = (props) => {
           <Alert variant="success" onClose={() => setError(null)} dismissible>
               <Alert.Heading>Milestone set!</Alert.Heading>
               <p>
-              Milestone set, locking in {milestone.toString()} dai of funding.
+              Milestone set, locking in {milestone.toString()} tokens of funding.
               </p>
           </Alert>
       ) 
@@ -183,7 +179,7 @@ export const AuditorPage = (props) => {
           <Alert variant="dark" onClose={() => setDataBoard(null)} dismissible>
               <Alert.Heading>Milestone Data</Alert.Heading>
               <div>
-                <div>Milestone Budget: {milestone.toString()} dai </div>
+                <div>Milestone Budget: {milestone.toString()} tokens </div>
                 <div>Milestone Timeilne: {timeline.toString()} months</div>
               </div>
           </Alert>
