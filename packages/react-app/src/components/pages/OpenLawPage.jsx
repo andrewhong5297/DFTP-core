@@ -215,7 +215,7 @@ export const OpenLawForm = (props) => {
         //hub login andrewhong5297
         //
         const IPFShash = "hellotextile" //should have milestone descriptions, name, budgets/timelines, owner (user), bidder, and auditor (user) address. Brownie points for fitting it into a document
-
+        
 
         await projectContract.connect(user).approveBidderTerms(
             bidderAddress, //this should be bidder later

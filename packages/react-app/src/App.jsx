@@ -30,6 +30,7 @@ import { OwnerPage } from "./components/pages/OwnerPage";
 import { AuditorPage } from "./components/pages/AuditorPage";
 import { BidderPage } from "./components/pages/BidderPage";
 import { OpenLawForm } from "./components/pages/OpenLawPage";
+import { TextileTest } from "./components/pages/textileInteractionsTest";
 import { GET_FUNDERS } from "./graphql/subgraph";
 
 const { abi: abiToken } = require("./abis/SecurityToken.json");
@@ -292,8 +293,9 @@ function App() {
                       </div>
                     </Card>
                     <Card>
+                      <TextileTest />
                       <div className="cardDiv">
-                        <h6 className="mt-1">Please {link} for new projects, otherwise search for project name below:</h6>
+                        <h6 className="mt-1">Please {link} or fill out form above for new projects; otherwise search for project name below:</h6>
                           <form onSubmit={handleSubmit(updateContracts)} className="">
                             <div className="input-group mb-3">
                                 <div className="input-group-append col-centered">
