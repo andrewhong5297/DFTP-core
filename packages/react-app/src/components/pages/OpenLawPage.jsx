@@ -25,114 +25,113 @@ export const OpenLawForm = (props) => {
         props.userProvider
     );
 
-    const handleSelect=(e)=>{
+    const handleSelect = (e) => {
         role = e;
         console.log(role)
-        if (e == "owner")  {
+        if (e == "owner") {
             changeForm(
-            <React.Fragment>
-                <form onSubmit={handleSubmit_review(pullUpForm)} className="">
-                    <div><h6>Search below if you have project already submitted</h6></div>
-                    <div className="input-group mb-3">
-                        <div className="input-group-append col-centered">
-                        <label>
-                        <input type="text" name="value" ref={register_review} className="form-control" placeholder="Honduras Agriculture Project" aria-describedby="button-addon2" />
-                        </label>
-                        <div><button className="btn col-centeredbtn btn-outline-secondary" type="submit" value="submit" id="button-addon2">Pull up bidder review</button></div>
+                <React.Fragment>
+                    <form onSubmit={handleSubmit_review(pullUpForm)} className="">
+                        <div><h6>Search below if you have project already submitted</h6></div>
+                        <div className="input-group mb-3">
+                            <div className="input-group-append col-centered">
+                                <label>
+                                    <input type="text" name="value" ref={register_review} className="form-control" placeholder="Honduras Agriculture Project" aria-describedby="button-addon2" />
+                                </label>
+                                <div><button className="btn col-centeredbtn btn-outline-secondary" type="submit" value="submit" id="button-addon2">Pull up bidder review</button></div>
+                            </div>
                         </div>
-                    </div>
-                 </form>
-                 <br></br>
-                <form onSubmit={handleSubmit_initial(sendForm)} className="">
-                <div className="input-group-append col-centered">
-                    <div>
-                        <label>
-                        <input type="text" name="name" ref={register_initial} className="form-control" placeholder="Honduras Agriculture Project" aria-describedby="button-addon2" />
-                        </label>
-                        <label>
-                        <input type="text" name="symbol" ref={register_initial} className="form-control" placeholder="HAP" aria-describedby="button-addon2" />
-                        </label>
-                    </div>
-                    <div>
-                        <label>
-                        <input type="text" name="milestone1" ref={register_initial} className="form-control" placeholder="Milestone One Description" aria-describedby="button-addon2" />
-                        </label>
-                        <label>
-                        <input type="text" name="milestone1budget" ref={register_initial} className="form-control" placeholder="Milestone One Budget" aria-describedby="button-addon2" />
-                        </label>
-                        <label>
-                        <input type="text" name="milestone1timeline" ref={register_initial} className="form-control" placeholder="Milestone One Timeline" aria-describedby="button-addon2" />
-                        </label>
-                    </div>
-                    <div>
-                        <label>
-                        <input type="text" name="milestone2" ref={register_initial} className="form-control" placeholder="Milestone Two Description" aria-describedby="button-addon2" />
-                        </label>
-                        <label>
-                        <input type="text" name="milestone2budget" ref={register_initial} className="form-control" placeholder="Milestone Two Budget" aria-describedby="button-addon2" />
-                        </label>
-                        <label>
-                        <input type="text" name="milestone2timeline" ref={register_initial} className="form-control" placeholder="Milestone Two Timeline" aria-describedby="button-addon2" />
-                        </label>
-                    </div>
-                    <div>
-                        <label>
-                        <input type="text" name="milestone3" ref={register_initial} className="form-control" placeholder="Milestone Three Description" aria-describedby="button-addon2" />
-                        </label>
-                        <label>
-                        <input type="text" name="milestone3budget" ref={register_initial} className="form-control" placeholder="Milestone Three Budget" aria-describedby="button-addon2" />
-                        </label>
-                        <label>
-                        <input type="text" name="milestone3timeline" ref={register_initial} className="form-control" placeholder="Milestone Three Timeline" aria-describedby="button-addon2" />
-                        </label>
-                    </div>
-                    <div><button className="btn col-centeredbtn btn-outline-secondary" type="submit" value="submit" id="button-addon2">Submit Project for Bidders</button></div>
-                </div>
-                </form>
-        </React.Fragment>
+                    </form>
+                    <br></br>
+                    <form onSubmit={handleSubmit_initial(sendForm)} className="">
+                        <div className="input-group-append col-centered">
+                            <div>
+                                <label>
+                                    <input type="text" name="name" ref={register_initial} className="form-control" placeholder="Honduras Agriculture Project" aria-describedby="button-addon2" />
+                                </label>
+                                <label>
+                                    <input type="text" name="symbol" ref={register_initial} className="form-control" placeholder="HAP" aria-describedby="button-addon2" />
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                    <input type="text" name="milestone1" ref={register_initial} className="form-control" placeholder="Milestone One Description" aria-describedby="button-addon2" />
+                                </label>
+                                <label>
+                                    <input type="text" name="milestone1budget" ref={register_initial} className="form-control" placeholder="Milestone One Budget" aria-describedby="button-addon2" />
+                                </label>
+                                <label>
+                                    <input type="text" name="milestone1timeline" ref={register_initial} className="form-control" placeholder="Milestone One Timeline" aria-describedby="button-addon2" />
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                    <input type="text" name="milestone2" ref={register_initial} className="form-control" placeholder="Milestone Two Description" aria-describedby="button-addon2" />
+                                </label>
+                                <label>
+                                    <input type="text" name="milestone2budget" ref={register_initial} className="form-control" placeholder="Milestone Two Budget" aria-describedby="button-addon2" />
+                                </label>
+                                <label>
+                                    <input type="text" name="milestone2timeline" ref={register_initial} className="form-control" placeholder="Milestone Two Timeline" aria-describedby="button-addon2" />
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                    <input type="text" name="milestone3" ref={register_initial} className="form-control" placeholder="Milestone Three Description" aria-describedby="button-addon2" />
+                                </label>
+                                <label>
+                                    <input type="text" name="milestone3budget" ref={register_initial} className="form-control" placeholder="Milestone Three Budget" aria-describedby="button-addon2" />
+                                </label>
+                                <label>
+                                    <input type="text" name="milestone3timeline" ref={register_initial} className="form-control" placeholder="Milestone Three Timeline" aria-describedby="button-addon2" />
+                                </label>
+                            </div>
+                            <div><button className="btn col-centeredbtn btn-outline-secondary" type="submit" value="submit" id="button-addon2">Submit Project for Bidders</button></div>
+                        </div>
+                    </form>
+                </React.Fragment>
             )
             return
         }
-        if (e == "bidder")
-        {
-            changeForm(            
-            <React.Fragment>
-                <form onSubmit={handleSubmit_bidder_search(pullUpForm)} className="">
-                    <div><h6>Search below if you have project already submitted</h6></div>
-                    <div className="input-group mb-3">
-                        <div className="input-group-append col-centered">
-                        <label>
-                        <input type="text" name="value" ref={register_bidder_search} className="form-control" placeholder="Honduras Agriculture Project" aria-describedby="button-addon2" />
-                        </label>
-                        <div><button className="btn col-centeredbtn btn-outline-secondary" type="submit" value="submit" id="button-addon2">Pull up owner milestone template</button></div>
+        if (e == "bidder") {
+            changeForm(
+                <React.Fragment>
+                    <form onSubmit={handleSubmit_bidder_search(pullUpForm)} className="">
+                        <div><h6>Search below if you have project already submitted</h6></div>
+                        <div className="input-group mb-3">
+                            <div className="input-group-append col-centered">
+                                <label>
+                                    <input type="text" name="value" ref={register_bidder_search} className="form-control" placeholder="Honduras Agriculture Project" aria-describedby="button-addon2" />
+                                </label>
+                                <div><button className="btn col-centeredbtn btn-outline-secondary" type="submit" value="submit" id="button-addon2">Pull up owner milestone template</button></div>
+                            </div>
                         </div>
-                    </div>
-                 </form>
-        </React.Fragment>)
+                    </form>
+                </React.Fragment>)
             return
         }
     }
-        
+
     const sendForm = async (formData) => {
         console.log(formData)
         if (role == "owner") {
-           const newProject = await OpenLawFactory.connect(user).deployNewProject(
-            user.getAddress(),
-            props.HolderFactory.address,
-            props.TokenFactory.address,
-            formData.name, // form data
-            formData.symbol, //form data
-            formData.milestone1 + ";" + formData.milestone2 + ";" + formData.milestone3, //form data
-            [ethers.BigNumber.from(formData.milestone1timeline),ethers.BigNumber.from(formData.milestone2timeline),ethers.BigNumber.from(formData.milestone3timeline)], //3 form data
-            [ethers.BigNumber.from(formData.milestone1budget),ethers.BigNumber.from(formData.milestone2budget),ethers.BigNumber.from(formData.milestone3budget)]) //3 form data
+            const newProject = await OpenLawFactory.connect(user).deployNewProject(
+                user.getAddress(),
+                props.HolderFactory.address,
+                props.TokenFactory.address,
+                formData.name, // form data
+                formData.symbol, //form data
+                formData.milestone1 + ";" + formData.milestone2 + ";" + formData.milestone3, //form data
+                [ethers.BigNumber.from(formData.milestone1timeline), ethers.BigNumber.from(formData.milestone2timeline), ethers.BigNumber.from(formData.milestone3timeline)], //3 form data
+                [ethers.BigNumber.from(formData.milestone1budget), ethers.BigNumber.from(formData.milestone2budget), ethers.BigNumber.from(formData.milestone3budget)]) //3 form data
         }
     }
 
-    const sendFormBidder = async(formData) => {
+    const sendFormBidder = async (formData) => {
         if (role == "bidder") {
             const bidderTerms = await projectContract.connect(user).newBidderTerms(
-                [ethers.BigNumber.from(formData.milestone1timeline),ethers.BigNumber.from(formData.milestone2timeline),ethers.BigNumber.from(formData.milestone3timeline)], //3 form data
-                [ethers.BigNumber.from(formData.milestone1budget),ethers.BigNumber.from(formData.milestone2budget),ethers.BigNumber.from(formData.milestone3budget)]) //3 form data
+                [ethers.BigNumber.from(formData.milestone1timeline), ethers.BigNumber.from(formData.milestone2timeline), ethers.BigNumber.from(formData.milestone3timeline)], //3 form data
+                [ethers.BigNumber.from(formData.milestone1budget), ethers.BigNumber.from(formData.milestone2budget), ethers.BigNumber.from(formData.milestone3budget)]) //3 form data
         }
     }
 
@@ -146,67 +145,66 @@ export const OpenLawForm = (props) => {
         );
         console.log(projectContract)
 
-        if (role == "owner")
-        {
-          const all_addresses = await projectContract.connect(user).getAllBidderAddresses()
-          console.log("all addresses: ", all_addresses);
-          let all_address_proposals = []
+        if (role == "owner") {
+            const all_addresses = await projectContract.connect(user).getAllBidderAddresses()
+            console.log("all addresses: ", all_addresses);
+            let all_address_proposals = []
 
-          for (let i = 0; i < all_addresses.length; i++) {
-            const toPush = await projectContract.connect(user).loadBidderTerms(all_addresses[i])
-            all_address_proposals.push(toPush)
-          }
-          
-          changeForm(
-            all_address_proposals.map(( {_budgets, _timelines}, index) => {
-                return(
-                <button onClick={() => finalApproval(all_addresses[index])} id={all_addresses[index]}>
-                    <div>
-                        <div>Proposer: {index} {all_addresses[index]}</div>
-                        <div>Project Budget: {_budgets[0].toString()} dai, {_budgets[1].toString()} dai, {_budgets[2].toString()} dai</div>
-                        <div>Project Timeline: {_timelines[0].toString()} months, {_timelines[1].toString()} months, {_timelines[2].toString()} months</div>
-                    </div>
-                </button>
-                )
-            }))
-          //changeForm() print all in buttons, where click sends off finalApproval(projectContract, bidderaddress from loop id?)
+            for (let i = 0; i < all_addresses.length; i++) {
+                const toPush = await projectContract.connect(user).loadBidderTerms(all_addresses[i])
+                all_address_proposals.push(toPush)
+            }
+
+            changeForm(
+                all_address_proposals.map(({ _budgets, _timelines }, index) => {
+                    return (
+                        <button onClick={() => finalApproval(all_addresses[index])} id={all_addresses[index]}>
+                            <div>
+                                <div>Proposer: {index} {all_addresses[index]}</div>
+                                <div>Project Budget: {_budgets[0].toString()} dai, {_budgets[1].toString()} dai, {_budgets[2].toString()} dai</div>
+                                <div>Project Timeline: {_timelines[0].toString()} months, {_timelines[1].toString()} months, {_timelines[2].toString()} months</div>
+                            </div>
+                        </button>
+                    )
+                }))
+            //changeForm() print all in buttons, where click sends off finalApproval(projectContract, bidderaddress from loop id?)
         }
-        if (role == "bidder"){
+        if (role == "bidder") {
             console.log("bidder pull up form called")
             const [milestones, budgets, timelines] = await projectContract.connect(user).loadOwnerTerms()
             console.log(milestones)
             changeForm(
-            <form onSubmit={handleSubmit_bidder(sendFormBidder)} className="">
-                <div className="input-group-append col-centered">
-                    <div>
-                        <div>{milestones.split(';')[0]}</div>
-                        <label>
-                        <input type="text" name="milestone1budget" ref={register_bidder} className="form-control" placeholder="Milestone One Budget" aria-describedby="button-addon2" />
-                        </label>
-                        <label>
-                        <input type="text" name="milestone1timeline" ref={register_bidder} className="form-control" placeholder="Milestone One Timeline" aria-describedby="button-addon2" />
-                        </label>
+                <form onSubmit={handleSubmit_bidder(sendFormBidder)} className="">
+                    <div className="input-group-append col-centered">
+                        <div>
+                            <div>{milestones.split(';')[0]}</div>
+                            <label>
+                                <input type="text" name="milestone1budget" ref={register_bidder} className="form-control" placeholder="Milestone One Budget" aria-describedby="button-addon2" />
+                            </label>
+                            <label>
+                                <input type="text" name="milestone1timeline" ref={register_bidder} className="form-control" placeholder="Milestone One Timeline" aria-describedby="button-addon2" />
+                            </label>
+                        </div>
+                        <div>
+                            <div>{milestones.split(';')[1]}</div>
+                            <label>
+                                <input type="text" name="milestone2budget" ref={register_bidder} className="form-control" placeholder="Milestone Two Budget" aria-describedby="button-addon2" />
+                            </label>
+                            <label>
+                                <input type="text" name="milestone2timeline" ref={register_bidder} className="form-control" placeholder="Milestone Two Timeline" aria-describedby="button-addon2" />
+                            </label>
+                        </div>
+                        <div>
+                            <div>{milestones.split(';')[2]}</div>
+                            <label>
+                                <input type="text" name="milestone3budget" ref={register_bidder} className="form-control" placeholder="Milestone Three Budget" aria-describedby="button-addon2" />
+                            </label>
+                            <label>
+                                <input type="text" name="milestone3timeline" ref={register_bidder} className="form-control" placeholder="Milestone Three Timeline" aria-describedby="button-addon2" />
+                            </label>
+                        </div>
+                        <div><button className="btn col-centeredbtn btn-outline-secondary" type="submit" value="submit" id="button-addon2">Submit Project for Bidders</button></div>
                     </div>
-                    <div>
-                        <div>{milestones.split(';')[1]}</div>
-                        <label>
-                        <input type="text" name="milestone2budget" ref={register_bidder} className="form-control" placeholder="Milestone Two Budget" aria-describedby="button-addon2" />
-                        </label>
-                        <label>
-                        <input type="text" name="milestone2timeline" ref={register_bidder} className="form-control" placeholder="Milestone Two Timeline" aria-describedby="button-addon2" />
-                        </label>
-                    </div>
-                    <div>
-                        <div>{milestones.split(';')[2]}</div>
-                        <label>
-                        <input type="text" name="milestone3budget" ref={register_bidder} className="form-control" placeholder="Milestone Three Budget" aria-describedby="button-addon2" />
-                        </label>
-                        <label>
-                        <input type="text" name="milestone3timeline" ref={register_bidder} className="form-control" placeholder="Milestone Three Timeline" aria-describedby="button-addon2" />
-                        </label>
-                    </div>
-                    <div><button className="btn col-centeredbtn btn-outline-secondary" type="submit" value="submit" id="button-addon2">Submit Project for Bidders</button></div>
-                </div>
                 </form>
             )
         }
@@ -225,7 +223,7 @@ export const OpenLawForm = (props) => {
             props.Dai.address,
             user.getAddress(), //this should be auditor later
             "hashGoesHere"
-            )
+        )
 
         //setting escrow
         const escrow = await props.HolderFactory.getHolder(projectName);
@@ -235,36 +233,34 @@ export const OpenLawForm = (props) => {
         console.log(project)
 
         const firstProjectContract = new ethers.Contract(
-        project.projectAddress,
-        abiToken,
-        props.userProvider
+            project.projectAddress,
+            abiToken,
+            props.userProvider
         );
 
         console.log(firstProjectContract)
         await firstProjectContract.connect(user).setHolder(
-        escrow.projectAddress);
+            escrow.projectAddress);
     }
-    
+
     return (
         <div>
             <Container>
-                <Row>
-                    <Col>
-                        <div><h6>For New Project Setup Only:</h6></div>
-                        <div className="input-group mb-3 col-centered">
+                <Row className="d-flex justify-content-center mb-3">
+                    <div className="col-lg-12 col-sm-12"><h6>For New Project Setup Only:</h6></div>
+                    <div className="col-lg-12 col-sm-12 input-group d-flex justify-content-center">
                         <Dropdown onSelect={handleSelect}>
-                                <Dropdown.Toggle variant="primary" id="dropdown-basic" size="md">
+                            <Dropdown.Toggle variant="primary" id="dropdown-basic" size="md">
                                 Project Setup Roles
                                 </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    <Dropdown.Item eventKey="owner">Owner</Dropdown.Item>
-                                    <Dropdown.Item eventKey="bidder">Bidder</Dropdown.Item>
-                                </Dropdown.Menu>  
-                            </Dropdown>
-                        </div>
-                    </Col>
+                            <Dropdown.Menu>
+                                <Dropdown.Item eventKey="owner">Owner</Dropdown.Item>
+                                <Dropdown.Item eventKey="bidder">Bidder</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </div>
                 </Row>
-                <Row>
+                <Row className="d-flex justify-content-center">
                     {formState}
                 </Row>
             </Container>
