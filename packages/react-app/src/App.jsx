@@ -20,7 +20,6 @@ import "./App.css";
 //added stuff
 import { ethers } from "ethers";
 import { useForm } from "react-hook-form";
-// import CPK from "contract-proxy-kit"
 import { useQuery } from '@apollo/react-hooks';
 
 import { HomePage } from "./components/pages/HomePage";

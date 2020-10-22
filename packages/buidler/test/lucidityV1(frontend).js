@@ -12,7 +12,7 @@ function mnemonic() {
 }
 
 //make sure you have 'npx buidler node' running
-describe("Lucidity Full Feature Test", function () {
+describe("Lucidity Frontend Contract and Faucet Setup", function () {
   let Dai, HolderFactory, TokenFactory, CT, owner;
   //https://docs.ethers.io/ethers.js/v5-beta/api-contract.html#overrides
   const overrides = {
@@ -71,130 +71,5 @@ describe("Lucidity Full Feature Test", function () {
     console.log("tokenfactory address: ", TokenFactory.address);
     console.log("holderfactory address: ", HolderFactory.address);
     console.log("openlawneg address: ", OpenLawFactory.address);
-  });
-
-  xit("deploy first escrow and project (Called from openlaw)", async function () {
-    //deploy escrow
-    await HolderFactory.connect(owner).deployNewHolder(
-      "Honduras Agriculture Project",
-      CT.address,
-      Dai.address,
-      owner.getAddress(),
-      owner.getAddress(),
-      owner.getAddress(),
-      [ethers.BigNumber.from("500"),ethers.BigNumber.from("800"),ethers.BigNumber.from("300")],
-      [ethers.BigNumber.from("32"),ethers.BigNumber.from("36"),ethers.BigNumber.from("24")],
-      overrides
-    );
-
-    const escrow = await HolderFactory.getHolder("Honduras Agriculture Project");
-
-    const firstEscrow = new ethers.Contract(
-      escrow.projectAddress,
-      abiEscrow,
-      owner
-    );
-    console.log("Project Name: ", await firstEscrow.projectName())
-    const budgets = await firstEscrow.getBudgets()
-    console.log(`budgets: ${budgets.toString()} dai`)
-    const timeline = await firstEscrow.getTimelines()
-    console.log(`timeline: ${timeline.toString()} months`)
-
-    //deploy project
-    await TokenFactory.connect(owner).deployNewProject(
-      "Honduras Agriculture Project",
-      "AT",
-      "linkhere",
-      Dai.address,
-      owner.getAddress(),
-      owner.getAddress(),
-      owner.getAddress(),
-      overrides
-    );
-
-    const project = await TokenFactory.getProject("Honduras Agriculture Project");
-
-    const firstProjectContract = new ethers.Contract(
-      project.projectAddress,
-      abiToken,
-      owner
-    );
-    
-    console.log("Make sure to update addresses in app.js after deploying");
-    console.log("Dai address: ", Dai.address);
-    console.log("CT address: ", CT.address);
-    console.log("firsEscrow address: ", firstEscrow.address);
-    console.log("firstProjectContract address: ", firstProjectContract.address);
-
-    await firstProjectContract.connect(owner).setHolder(
-      escrow.projectAddress);
-
-    expect(
-      (await firstProjectContract.projectName()) == "AgriTest",
-      "project did not get init correctly"
-    );
-  });
-
-  
- xit("deploy second escrow and project (Called from openlaw)", async function () {
-    //deploy escrow
-    await HolderFactory.connect(owner).deployNewHolder(
-      "Indonesia Water Project",
-      CT.address,
-      Dai.address,
-      owner.getAddress(),
-      owner.getAddress(),
-      owner.getAddress(),
-      [ethers.BigNumber.from("300"),ethers.BigNumber.from("400"),ethers.BigNumber.from("600")],
-      [ethers.BigNumber.from("20"),ethers.BigNumber.from("26"),ethers.BigNumber.from("30")],
-      overrides
-    );
-
-    const escrow = await HolderFactory.getHolder("Indonesia Water Project");
-
-    const firstEscrow = new ethers.Contract(
-      escrow.projectAddress,
-      abiEscrow,
-      owner
-    );
-    console.log("Project Name: ", await firstEscrow.projectName())
-    const budgets = await firstEscrow.getBudgets()
-    console.log(`budgets: ${budgets.toString()} dai`)
-    const timeline = await firstEscrow.getTimelines()
-    console.log(`timeline: ${timeline.toString()} months`)
-
-    //deploy project
-    await TokenFactory.connect(owner).deployNewProject(
-      "Indonesia Water Project",
-      "IW",
-      "linkhere2",
-      Dai.address,
-      owner.getAddress(),
-      owner.getAddress(),
-      owner.getAddress(),
-      overrides
-    );
-
-    const project = await TokenFactory.getProject("Indonesia Water Project");
-
-    const firstProjectContract = new ethers.Contract(
-      project.projectAddress,
-      abiToken,
-      owner
-    );
-    
-    console.log("Make sure to update addresses in app.js after deploying");
-    console.log("Dai address: ", Dai.address);
-    console.log("CT address: ", CT.address);
-    console.log("second Escrow address: ", firstEscrow.address);
-    console.log("second ProjectContract address: ", firstProjectContract.address);
-
-    await firstProjectContract.connect(owner).setHolder(
-      escrow.projectAddress);
-
-    expect(
-      (await firstProjectContract.projectName()) == "Indonesia Water Project",
-      "project did not get init correctly"
-    );
   });
 });
