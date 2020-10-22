@@ -19,7 +19,6 @@ import "./App.css";
 
 //added stuff
 import { ethers } from "ethers";
-import { Buttons } from "./components/mainComponents/funderButtons";
 import { useForm } from "react-hook-form";
 // import CPK from "contract-proxy-kit"
 import { useQuery } from '@apollo/react-hooks';
@@ -30,7 +29,6 @@ import { OwnerPage } from "./components/pages/OwnerPage";
 import { AuditorPage } from "./components/pages/AuditorPage";
 import { BidderPage } from "./components/pages/BidderPage";
 import { OpenLawForm } from "./components/pages/OpenLawPage";
-import { TextileTest } from "./components/pages/textileInteractionsTest";
 import { GET_FUNDERS } from "./graphql/subgraph";
 
 const { abi: abiToken } = require("./abis/SecurityToken.json");
@@ -39,8 +37,6 @@ const { abi: abiTokenF } = require("./abis/TokenFactory.json");
 const { abi: abiEscrowF } = require("./abis/HolderFactory.json");
 const { abi: abiDai } = require("./abis/Dai.json");
 const { abi: abiCT } = require("./abis/ConditionalTokens.json");
-const { abi: abiOLF } = require("./abis/ProjectTrackerFactory.json");
-
 
 /* IMPORTANT STEPS FOR TESTING 
 1) Start buidler node with yarn chain (or ganache-cli -h 0.0.0.0). Take one of the private keys and place it in the faucet address in test contract (line 25)
@@ -121,12 +117,6 @@ function App() {
     userProvider
   );
 
-  let OpenLawFactory = new ethers.Contract(
-    "0x5D49B56C954D11249F59f03287619bE5c6174879",
-    abiOLF,
-    userProvider
-  );
-  
   //update after project name search
   const [error, setError] = useState()
   const [projectNotConnected, setConnection] = useState(true);
@@ -272,7 +262,7 @@ function App() {
         Project = {Project}
         Dai = {Dai}
         CT={CT}
-        OLF = {OpenLawFactory}/>)
+        />)
       setRole("Owner")
     }
   }
@@ -302,7 +292,7 @@ function App() {
                 <Row className="mt-1">
                     <Col>
                     <Card>
-                    <TextileTest />
+                    {/* <TextileTest /> */}
                       <div className="cardDiv">
                         <OpenLawForm 
                           provider ={userProvider} 
@@ -360,15 +350,8 @@ function App() {
                 </Row>
               </Container>
                 <div className="fixed-bottom">
-                  <h5 style={{color: "black"}}>: Localhost faucet here</h5>
                   <Button onClick = {updateDaiBalance} size="sm">Update Dai Balance</Button>
                   {daibalance}
-                  <Buttons 
-                    address={address} 
-                    provider ={userProvider} 
-                    escrow = {Escrow}
-                    Project = {Project}
-                    Dai = {Dai}/>
                 </div>
             </Route>
           </Switch>

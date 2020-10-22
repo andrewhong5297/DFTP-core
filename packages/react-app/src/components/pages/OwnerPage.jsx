@@ -8,12 +8,6 @@ export const OwnerPage = (props) => {
     let projectName,budgets,timeline;
     const [textArea, setText] = useState("loading...")
     
-    // const projectNeg = await OpenLawFactory.connect(user).getProject(projectName)
-    // const projectNegContract = new ethers.Contract(
-    //     project.projectAddress, //insert new project deployed address
-    //     abiOL,
-    //     props.userProvider
-    // );
     const getProjectDetails= async () => {
         projectName = await props.escrow.projectName()
         const budgets = await props.escrow.getBudgets()

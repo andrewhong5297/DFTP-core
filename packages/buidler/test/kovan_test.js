@@ -8,7 +8,8 @@ const { abi: abiAAVE } = require("../artifacts/AaveCollateralVault.json");
 const { abi: abiAAVEP } = require("../artifacts/AaveCollateralVaultProxy.json");
 const { abi: abiHolderC } = require("../artifacts/HolderContract.json");
 const { abi: abiCT } = require("../artifacts/ConditionalTokens.json");
-const { abi: abiDai } = require("../artifacts/Dai.json")
+const { abi: abiDai } = require("../artifacts/Dai.json");
+const { abi: abiOLF } = require("../artifacts/ProjectTrackerFactory.json");
 const fs = require("fs");
 
 use(solidity);
@@ -19,7 +20,8 @@ function mnemonic() {
 
 //make sure you have 'npx buidler node' running
 describe("Kovan Deploy and Test", function () {
-  let Dai, HolderFactory, TokenFactory, CT, AAVEvault, AAVEvaultproxy, provider, owner, overrides;
+  let Dai, HolderFactory, TokenFactory, CT, AAVEvault, AAVEvaultproxy, OpenLawF;
+  let provider, owner, overrides;
 
   it("deploy factories", async function () {
 
@@ -30,6 +32,10 @@ describe("Kovan Deploy and Test", function () {
 
     // This can be an address or an ENS name
     const address = "0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa" //"0xc7ad46e0b8a400bb3c915120d284aafba8fc4735"; dai address on rinkeby, currently using kovan
+    //https://docs.ethers.io/ethers.js/v5-beta/api-contract.html#overrides
+    overrides = {
+      gasLimit: ethers.BigNumber.from("9500000"),
+    };
 
     Dai = new ethers.Contract(address, abiDai, provider);
 
@@ -41,23 +47,31 @@ describe("Kovan Deploy and Test", function () {
     console.log("eth held in wei: ", balance_owner.toString());
     console.log("dai held: ", balancedai_owner.toString());
 
-    const TokenFactoryContract = await ethers.getContractFactory("TokenFactory");
-    TokenFactory = await TokenFactoryContract.connect(owner).deploy();
+    // const TokenFactoryContract = await ethers.getContractFactory("TokenFactory");
+    // TokenFactory = await TokenFactoryContract.connect(owner).deploy(overrides);
+    // console.log("TokenFactory deployed")
 
     const HolderFactoryContract = await ethers.getContractFactory("HolderFactory");
-    HolderFactory = await HolderFactoryContract.connect(owner).deploy();
-
-    const AaveVaultContract = await ethers.getContractFactory("AaveCollateralVault");
-    AAVEvault = await AaveVaultContract.connect(owner).deploy();
-
-    const CTContract = await ethers.getContractFactory("ConditionalTokens"); //contract name here
-    CT = await CTContract.deploy();
+    HolderFactory = await HolderFactoryContract.connect(owner).deploy(overrides);
+    console.log("HolderFactory deployed")
     
+    const OpenLawFContract = await ethers.getContractFactory("ProjectTrackerFactory");
+    OpenLawF = await OpenLawFContract.connect(owner).deploy(overrides);
+    console.log("OpenLawF deployed")
+
     const AAVEproxyContract = await ethers.getContractFactory("AaveCollateralVaultProxy"); //contract name here
-    AAVEvaultproxy = await AAVEproxyContract.deploy();
+    AAVEvaultproxy = await AAVEproxyContract.deploy(overrides);
+    console.log("AAVEvaultproxy deployed") 
+    
+    const CTContract = await ethers.getContractFactory("ConditionalTokens"); //contract name here
+    CT = await CTContract.deploy(overrides);
+    console.log("CT deployed")
     
     // CT = new ethers.Contract("0x0eFC99FAb24Bf6c352Bd94560be3d990CA83c85c", abiCT, provider);
     // console.log("CT: ", CT.address)
+
+    // OpenLawF = new ethers.Contract("0x0eFC99FAb24Bf6c352Bd94560be3d990CA83c85c", abiOLF, provider);
+    // console.log("OpenLawF Factory: ", OpenLawF.address)
 
     // TokenFactory = new ethers.Contract("0x0eFC99FAb24Bf6c352Bd94560be3d990CA83c85c", abiFactory, provider);
     // console.log("Token Factory: ", TokenFactory.address)
@@ -65,19 +79,11 @@ describe("Kovan Deploy and Test", function () {
     // HolderFactory = new ethers.Contract("0x6e32B5b63f9AB084021a589AC6d2d64a1c5b6950", abiHolder, provider);
     // console.log("Escrow Factory: ", HolderFactory.address)
 
-    // AAVEvault = new ethers.Contract("0x6e32B5b63f9AB084021a589AC6d2d64a1c5b6950", abiAAVE, provider);
-    // console.log("AAVE Vault: ", AAVEvault.address)
-    
     // AAVEvaultproxy = new ethers.Contract("0x6e32B5b63f9AB084021a589AC6d2d64a1c5b6950", abiAAVEP, provider);
     // console.log("AAVE Vault: ", AAVEvaultproxy.address)
   });
   
   xit("deploy test project", async function () {    
-    //https://docs.ethers.io/ethers.js/v5-beta/api-contract.html#overrides
-    overrides = {
-      gasLimit: ethers.BigNumber.from("9500000"),
-    };
-
     // deploy escrow
     const escrow = await HolderFactory.connect(owner).deployNewHolder(
       "Honduras Agriculture Project",
