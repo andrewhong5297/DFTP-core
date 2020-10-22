@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table } from 'react-bootstrap'
+import { createUserAuth, Client, PrivateKey, ThreadID, UserAuth, QueryJSON} from '@textile/hub'
 const { abi: abiOL } = require("../../abis/ProjectNegotiationTracker.json");
 
 export const OwnerPage = (props) => {
@@ -17,6 +18,23 @@ export const OwnerPage = (props) => {
         projectName = await props.escrow.projectName()
         const budgets = await props.escrow.getBudgets()
         const timelines = await props.escrow.getTimelines()
+
+        //IPFS call
+        const expiration = new Date(Date.now() + 60 * 1000)
+        console.log(createUserAuth)
+        const userAuth = await createUserAuth("b4ubw5kjw4bnetzbld4zfqmbhaq", 
+                                        "bnlre4or4klaezixde3izvgotxbgluxlprywsrvi", 
+                                        expiration)
+        console.log(userAuth)
+        const client = await Client.withUserAuth(userAuth)
+
+        const threads = await client.listThreads()
+        console.log(threads)
+        const currentThreadID = ThreadID.fromString(threads.listList[0].id)
+        console.log(currentThreadID)
+        const found = await client.find(currentThreadID, "FinishedProjects", {}) //can put a queryJSON in the last part if we wanted to 
+        console.log(found)
+
         console.log(budgets[0].toString())
         setText(
             <div>
@@ -24,26 +42,26 @@ export const OwnerPage = (props) => {
                 <Table striped bordered hover>
                 <thead>
                     <tr>
-                    <th>Milestone #</th>
+                    <th>Milestone Description</th>
                     <th>Budget (Dai)</th>
                     <th>Timeline (Months)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                    <td>1</td>
-                    <td>{budgets[0].toString()}</td>
-                    <td>{timelines[0].toString()}</td>
+                    <td>{found[0].milestones.split(';')[0]}</td>
+                    <td>{found[0].budgets[0]}</td>
+                    <td>{found[0].timeline[0]}</td>
                     </tr>
                     <tr>
-                    <td>2</td>
-                    <td>{budgets[1].toString()}</td>
-                    <td>{timelines[1].toString()}</td>
+                    <td>{found[0].milestones.split(';')[1]}</td>
+                    <td>{found[0].budgets[1]}</td>
+                    <td>{found[0].timeline[1]}</td>
                     </tr>
                     <tr>
-                    <td>3</td>
-                    <td>{budgets[2].toString()}</td>
-                    <td>{timelines[2].toString()}</td>
+                    <td>{found[0].milestones.split(';')[2]}</td>
+                    <td>{found[0].budgets[2]}</td>
+                    <td>{found[0].timeline[2]}</td>
                     </tr>
                 </tbody>
                 </Table>

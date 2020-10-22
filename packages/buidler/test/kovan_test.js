@@ -41,20 +41,15 @@ describe("Kovan Deploy and Test", function () {
     console.log("eth held in wei: ", balance_owner.toString());
     console.log("dai held: ", balancedai_owner.toString());
 
-    // const TokenFactoryContract = await ethers.getContractFactory(
-    //   "TokenFactory"
-    // );
-    // TokenFactory = await TokenFactoryContract.connect(owner).deploy();
+    const TokenFactoryContract = await ethers.getContractFactory("TokenFactory");
+    TokenFactory = await TokenFactoryContract.connect(owner).deploy();
 
-    // const HolderFactoryContract = await ethers.getContractFactory(
-    //   "HolderFactory"
-    // );
-    // HolderFactory = await HolderFactoryContract.connect(owner).deploy();
+    const HolderFactoryContract = await ethers.getContractFactory("HolderFactory");
+    HolderFactory = await HolderFactoryContract.connect(owner).deploy();
 
-    // const AaveVaultContract = await ethers.getContractFactory(
-    //   "AaveCollateralVault"
-    // );
-    // AAVEvault = await AaveVaultContract.connect(owner).deploy();
+    const AaveVaultContract = await ethers.getContractFactory("AaveCollateralVault");
+    AAVEvault = await AaveVaultContract.connect(owner).deploy();
+
     const CTContract = await ethers.getContractFactory("ConditionalTokens"); //contract name here
     CT = await CTContract.deploy();
     
@@ -64,14 +59,14 @@ describe("Kovan Deploy and Test", function () {
     // CT = new ethers.Contract("0x0eFC99FAb24Bf6c352Bd94560be3d990CA83c85c", abiCT, provider);
     // console.log("CT: ", CT.address)
 
-    TokenFactory = new ethers.Contract("0x0eFC99FAb24Bf6c352Bd94560be3d990CA83c85c", abiFactory, provider);
-    console.log("Token Factory: ", TokenFactory.address)
+    // TokenFactory = new ethers.Contract("0x0eFC99FAb24Bf6c352Bd94560be3d990CA83c85c", abiFactory, provider);
+    // console.log("Token Factory: ", TokenFactory.address)
 
-    HolderFactory = new ethers.Contract("0x6e32B5b63f9AB084021a589AC6d2d64a1c5b6950", abiHolder, provider);
-    console.log("Escrow Factory: ", HolderFactory.address)
+    // HolderFactory = new ethers.Contract("0x6e32B5b63f9AB084021a589AC6d2d64a1c5b6950", abiHolder, provider);
+    // console.log("Escrow Factory: ", HolderFactory.address)
 
-    AAVEvault = new ethers.Contract("0x6e32B5b63f9AB084021a589AC6d2d64a1c5b6950", abiAAVE, provider);
-    console.log("AAVE Vault: ", AAVEvault.address)
+    // AAVEvault = new ethers.Contract("0x6e32B5b63f9AB084021a589AC6d2d64a1c5b6950", abiAAVE, provider);
+    // console.log("AAVE Vault: ", AAVEvault.address)
     
     // AAVEvaultproxy = new ethers.Contract("0x6e32B5b63f9AB084021a589AC6d2d64a1c5b6950", abiAAVEP, provider);
     // console.log("AAVE Vault: ", AAVEvaultproxy.address)

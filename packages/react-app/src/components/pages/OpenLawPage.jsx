@@ -230,7 +230,7 @@ export const OpenLawForm = (props) => {
 
         //getting data for textile
         const [milestones, budgets, timelines] = await projectContract.connect(user).loadOwnerTerms()
-        const [budgetsB, timelinesB] = await projectContract.connect(user).loadBidderTerms(bidderAddress)
+        const [timelinesB, budgetsB] = await projectContract.connect(user).loadBidderTerms(bidderAddress)
         const ownerAddress = await user.getAddress()
         const auditorAddress = await user.getAddress() //this needs to change in future
 

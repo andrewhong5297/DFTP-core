@@ -7,7 +7,7 @@ import { getDefaultProvider, JsonRpcProvider, Web3Provider } from "@ethersprojec
 import { useUserAddress } from "eth-hooks";
 // ui libs
 import Web3Modal from "web3modal";
-import { Button, Container, Row, Col, Card, Dropdown, Alert } from "react-bootstrap"
+import { Table, Button, Container, Row, Col, Card, Dropdown, Alert } from "react-bootstrap"
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 // common libs
@@ -186,15 +186,36 @@ function App() {
     else {
       console.log(ProjectName)
         //https://www.apollographql.com/docs/react/get-started/
-        setList(data.projects[0].fundingTokens.map(({ id, owner, fundingvalue, tenor}) => (
-        <div>
-          <div>Project Address: {data.projects[0].projectAddress}</div>
-          <div>Token id: {id}</div>
-          <div>Owner: {owner}</div> 
-          <div>Funded amount: {fundingvalue.toString()} dai</div>
-          <div>Funded tenor: {tenor.toString()} years</div>
-        </div>
-        )))
+        setList(
+          <div>
+               <br></br>
+               <h5>Project Address: {data.projects[0].projectAddress}</h5>
+               <br></br>
+                <Table striped bordered hover>
+                <thead>
+                    <tr>
+                    <th>Token Id</th>
+                    <th>Owner Address:</th>
+                    <th>Funded Amount</th>
+                    <th>Funded Tenor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {data.projects[0].fundingTokens.map(function({ id, owner, fundingvalue, tenor}) {
+                  console.log("was called")
+                    return(
+                    <tr>
+                    <td>{id}</td>
+                    <td>{owner}</td>
+                    <td>{fundingvalue.toString()}</td>
+                    <td>{tenor.toString()}</td>
+                    </tr>
+                    )
+                })}
+                </tbody>
+                </Table>
+            </div>
+        )
     }
   }
   
