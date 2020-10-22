@@ -4,9 +4,26 @@ pragma solidity >=0.6.0 <0.7.0;
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155Holder.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
+import "./AaveNonProxy.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
+
+interface AaveVaultProxy {
+    // amount needs to be normalized
+    function borrow(
+        AaveCollateralVault vault,
+        address reserve,
+        uint256 amount
+    ) external;
+
+    // function repay(
+    //     AaveCollateralVault vault,
+    //     address reserve,
+    //     uint256 amount
+    // ) external;
+}
 
 interface IConditionalTokens {
     function splitPosition(
@@ -24,6 +41,7 @@ interface IConditionalTokens {
 contract HolderContract is ERC1155Holder {
     using SafeMath for uint256;
 
+    AaveCollateralVault private vault;
     IERC1155 private CTtoken1155; //https://forum.openzeppelin.com/t/example-on-how-to-use-erc20-token-in-another-contract/1682
     IConditionalTokens private CTtoken;
     IERC20 private ERC20token;
@@ -66,6 +84,17 @@ contract HolderContract is ERC1155Holder {
     }
 
     //need a second recieve function for AAVE? and then have AAVE as a selection for split position?
+    function borrowERC20(
+        address _proxy,
+        address _vault,
+        address _reserve,
+        uint256 _value
+    ) external {
+        vault = AaveCollateralVault(_vault);
+        AaveVaultProxy proxy = AaveVaultProxy(_proxy);
+        totalValue = totalValue.add(_value);
+        proxy.borrow(vault, _reserve, _value);
+    }
 
     // Helper functions
     function getBalance() external view returns (uint256) {
