@@ -65,6 +65,8 @@ contract HolderContract is ERC1155Holder {
         ERC20token.approve(CTtokenAddress, totalValue);
     }
 
+    //need a second recieve function for AAVE? and then have AAVE as a selection for split position?
+
     // Helper functions
     function getBalance() external view returns (uint256) {
         return address(this).balance;

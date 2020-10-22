@@ -6,7 +6,7 @@ import "../../App.css";
 const { abi: abiOLF } = require("../../abis/ProjectTrackerFactory.json");
 const { abi: abiOL } = require("../../abis/ProjectNegotiationTracker.json");
 const { abi: abiToken } = require("../../abis/SecurityToken.json");
-const { abi: abiEscrow } = require("../../abis/HolderContract.json");
+//const { abi: abiEscrow } = require("../../abis/HolderContract.json");
 
 export const OpenLawForm = (props) => {
     const [formState, changeForm] = useState(<div>Choose your role</div>)
@@ -213,8 +213,12 @@ export const OpenLawForm = (props) => {
     }
 
     const finalApproval = async (bidderAddress) => {
-        //send to IPFS here? 
-        
+        //send to IPFS here and get a hash? 
+        //hub login andrewhong5297
+        //
+        const IPFShash = "hellotextile" //should have milestone descriptions, name, budgets/timelines, owner (user), bidder, and auditor (user) address. Brownie points for fitting it into a document
+
+
         await projectContract.connect(user).approveBidderTerms(
             bidderAddress, //this should be bidder later
             props.CT.address,
