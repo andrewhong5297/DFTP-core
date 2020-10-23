@@ -64,7 +64,9 @@ yarn deploy
 # Technologies Used
 
 ## Solidity
-## Gnosis CTokens
+## Gnosis Conditional Tokens
 ## The Graph API
+## Textile API
+## AAVE Risk Framework
 ## OpenLaw
 
