@@ -25,3 +25,24 @@ query projects($projectName : String!) {
   }
 }
 `;
+
+export const GET_BIDS = gql`
+query projects($projectName : String!) {
+  projects(where: {name: $projectName}) {
+    id
+    name
+    allBids (first: 10) {
+      id
+      bidderAddress
+      bidDate
+      timelines
+      budgets
+    }
+    projectAddress
+    ownerAddress
+    originalTimelines
+    originalBudgets
+    milestones
+  }
+}
+`;

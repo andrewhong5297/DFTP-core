@@ -28,7 +28,8 @@ import { OwnerPage } from "./components/pages/OwnerPage";
 import { AuditorPage } from "./components/pages/AuditorPage";
 import { BidderPage } from "./components/pages/BidderPage";
 import { OpenLawForm } from "./components/pages/OpenLawPage";
-import { GET_FUNDERS } from "./graphql/subgraph";
+//import { TextileTest } from "./components/pages/textileInteractionsTest";
+import { GET_FUNDERS, GET_BIDS } from "./graphql/subgraph";
 
 const { abi: abiToken } = require("./abis/SecurityToken.json");
 const { abi: abiEscrow } = require("./abis/HolderContract.json");
@@ -164,7 +165,16 @@ function App() {
     }
 
   //theGraph API requests
-  const { loading, gqlerror, data } = useQuery(GET_FUNDERS, { variables: {projectName: ProjectName}});
+  const client_funders = new ApolloClient({
+    uri: "http://127.0.0.1:8000/subgraphs/name/andrewhong5297/Lucidity-Funder-Tracking" //"https://api.thegraph.com/subgraphs/name/andrewhong5297/lucidity-funder-tracking",
+  });
+  
+  const client_bidders = new ApolloClient({
+    uri: "http://127.0.0.1:8000/subgraphs/name/andrewhong5297/Lucidity-Neg-Tracking" //"https://api.thegraph.com/subgraphs/name/andrewhong5297/lucidity-funder-tracking",
+  });
+  
+  const { loading, gqlerror, data } = useQuery(GET_FUNDERS, { variables: {projectName: ProjectName}, options: () => ({client: client_funders})});
+  const { loading2, gqlerror2, data2 } = useQuery(GET_BIDS, { variables: {projectName: ProjectName}, options: () => ({client: client_bidders})});
   const [ funderList, setList ] = useState("No funders yet, be the first one!")
   const queryResult = () => {
     if (loading) console.log("loading")
@@ -203,6 +213,14 @@ function App() {
             </div>
         )
     }
+  }
+  const queryResultBids = () => {
+    if (loading2) console.log("loading")
+    if (gqlerror2) console.log("error")
+    else {
+      console.log('query bids test')
+      console.log(data2)
+  }
   }
   
   //setting dai balance at bottom left
@@ -290,6 +308,7 @@ function App() {
                     <Card>
                     {/* <TextileTest /> */}
                       <div className="cardDiv">
+                      <Button onClick = {queryResultBids} size="sm">Update Bidders List (check console)</Button>
                         <OpenLawForm 
                           provider ={userProvider} 
                           address={address} 

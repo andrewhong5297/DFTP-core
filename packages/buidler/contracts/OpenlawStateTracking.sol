@@ -2,6 +2,7 @@
 pragma solidity >=0.6.0 <0.7.0;
 import "@openzeppelin/contracts/utils/Counters.sol";
 
+//contract being called to deploy after agreement
 interface IHolderFactory {
     function deployNewHolder(
         string calldata _name,
@@ -15,6 +16,7 @@ interface IHolderFactory {
     ) external returns (address);
 }
 
+//contract being called to deploy after agreement
 interface ITokenFactory {
     function deployNewProject(
         string calldata _name,
@@ -32,7 +34,14 @@ contract ProjectTrackerFactory {
     Counters.Counter public nonce; // acts as unique identifier for minted NFTs
 
     ProjectNegotiationTracker[] public projects;
-
+    event NewProject(
+        string name,
+        address owner,
+        address project,
+        uint256[] timelinesOwner,
+        uint256[] budgetsOwner,
+        string milestones
+    );
     mapping(string => uint256) public nameToProjectIndex;
 
     function deployNewProject(
@@ -62,6 +71,15 @@ contract ProjectTrackerFactory {
         nonce.increment(); //start at 1
         nameToProjectIndex[_name] = nonce.current();
 
+        //emit event
+        emit NewProject(
+            _name,
+            _owner,
+            address(newProject),
+            _timeline,
+            _budgets,
+            _milestones
+        );
         //should create safe in here too, and add an address variable for the safe.
         return address(newProject);
     }
@@ -94,6 +112,7 @@ contract ProjectNegotiationTracker {
     IHolderFactory private HF;
 
     event currentTermsApproved(address approvedBidder);
+    event newBidSent(address Bidder, uint256[] timelines, uint256[] budgets);
 
     constructor(
         address _owner,
@@ -135,6 +154,7 @@ contract ProjectNegotiationTracker {
         BidderToBudgets[msg.sender] = _budgets;
         BidderProposalStatus[msg.sender] = false;
         all_bidders.push(msg.sender);
+        emit newBidSent(msg.sender, _timelines, _budgets);
     }
 
     //called by owner approval submit
