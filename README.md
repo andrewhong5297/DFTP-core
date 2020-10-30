@@ -22,6 +22,9 @@ Rinkeby site here: http://lucidity-eth-R.surge.sh
 
 ![alt text](https://github.com/andrewhong5297/DFTP-core/blob/master/research/mission.png?raw=true)
 
+---
+You will need to add a mnemonic.txt with your metamask seed phrase in the buidler folder, this is for the faucet and deploying contracts. Make sure you add this to .gitignore and don't commit it on accident!!
+
 🎛 <b>Start</b>
 
 ```bash
@@ -66,9 +69,9 @@ yarn react-app:start
 
 📱 Open http://localhost:3000
 
+You will need to reset your metamask account to sync the nonce if you get an rpc error. 
 ---
 
-You may need to reset your metamask account to sync the nonce if you get an rpc error. 
 
 
 # Technologies Used
