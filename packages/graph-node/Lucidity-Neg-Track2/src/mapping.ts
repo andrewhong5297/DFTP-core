@@ -27,7 +27,7 @@ export function handleNewFunding(event: newBidSent): void {
   let newBid = new Bids(event.params.Bidder.toHex())
   log.info("New bidder at address: {}", [event.params.Bidder.toHex()])
   newBid.bidderAddress = event.params.Bidder.toHex()
-  newBid.bidDate = new Date().toLocaleString('en-GB', { timeZone: 'UTC' })
+  newBid.bidDate = "date here later" //new Date().toLocaleString('en-GB', { timeZone: 'UTC' })
   newBid.project = project.id
   newBid.budgets = event.params.budgets
   newBid.timelines = event.params.timelines
