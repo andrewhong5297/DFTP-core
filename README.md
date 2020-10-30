@@ -68,23 +68,7 @@ yarn react-app:start
 
 ---
 
-⛓ <b>blockchain</b>
-
-```bash
-
-yarn run chain
-
-```
-
-📚 <b>Deployment</b>
-
-```bash
-
-yarn deploy
-
-```
-
-**Note**: You'll need to run this command in a new terminal window
+You may need to reset your metamask account to sync the nonce if you get an rpc error. 
 
 
 # Technologies Used
