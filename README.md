@@ -67,9 +67,8 @@ yarn react-app:start
 
 ```
 
-📱 Open http://localhost:3000
+📱 Open http://localhost:3000 You will need to reset your metamask account to sync the nonce if you get an rpc error. 
 
-You will need to reset your metamask account to sync the nonce if you get an rpc error. 
 ---
 
 
