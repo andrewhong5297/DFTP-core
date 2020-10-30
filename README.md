@@ -22,7 +22,7 @@ Rinkeby site here: http://lucidity-eth-R.surge.sh
 
 ![alt text](https://github.com/andrewhong5297/DFTP-core/blob/master/research/mission.png?raw=true)
 
-🎛 <b>first</b>
+🎛 <b>Start</b>
 
 ```bash
 
@@ -30,11 +30,37 @@ yarn install
 
 ```
 
+🎛 <b>Start Local Chain and Deploy Contracts (You'll have to change the deployed addresses in the app.jsx file)</b>
+
+```bash
+
+yarn local-node
+
+```
+```bash
+
+yarn local-deploy
+
+```
+
+🎛 <b>Start Local Graph-Node and Deploy Subgraphs (if you restart your graph-node, you will have to empty the data folder)</b>
+
+```bash
+
+yarn local-graph
+
+```
+```bash
+
+yarn local-graph-deploy
+
+```
+
 🎛 <b>frontend</b>
 
 ```bash
 
-yarn start
+yarn react-app:start
 
 ```
 
