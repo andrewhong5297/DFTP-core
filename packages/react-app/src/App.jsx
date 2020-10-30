@@ -164,17 +164,17 @@ function App() {
       }
     }
 
-  //theGraph API requests
-  const client_funders = new ApolloClient({
-    uri: "http://127.0.0.1:8000/subgraphs/name/andrewhong5297/Lucidity-Funder-Tracking" //"https://api.thegraph.com/subgraphs/name/andrewhong5297/lucidity-funder-tracking",
-  });
+  //theGraph API requests (currently passing client is failing)
+  // const client_funders = new ApolloClient({
+  //   uri: "http://127.0.0.1:8000/subgraphs/name/andrewhong5297/Lucidity-Funder-Tracking" //"https://api.thegraph.com/subgraphs/name/andrewhong5297/lucidity-funder-tracking",
+  // });
   
-  const client_bidders = new ApolloClient({
-    uri: "http://127.0.0.1:8000/subgraphs/name/andrewhong5297/Lucidity-Neg-Tracking" //"https://api.thegraph.com/subgraphs/name/andrewhong5297/lucidity-funder-tracking",
-  });
+  // const client_bidders = new ApolloClient({
+  //   uri: "http://127.0.0.1:8000/subgraphs/name/andrewhong5297/Lucidity-Neg-Tracking" //"https://api.thegraph.com/subgraphs/name/andrewhong5297/lucidity-funder-tracking",
+  // });
   
-  const { loading, gqlerror, data } = useQuery(GET_FUNDERS, { variables: {projectName: ProjectName}, options: () => ({client: client_funders})});
-  const { loading2, gqlerror2, data2 } = useQuery(GET_BIDS, { variables: {projectName: ProjectName}, options: () => ({client: client_bidders})});
+  const { loading, gqlerror, data } = useQuery(GET_FUNDERS, { variables: {projectName: ProjectName}}) // options: () => ({client: client_funders})});
+  //const { loading2, gqlerror2, data2 } = useQuery(GET_BIDS, { variables: {projectName: ProjectName}}) //options: () => ({client: client_bidders})});
   const [ funderList, setList ] = useState("No funders yet, be the first one!")
   const queryResult = () => {
     if (loading) console.log("loading")
@@ -214,14 +214,14 @@ function App() {
         )
     }
   }
-  const queryResultBids = () => {
-    if (loading2) console.log("loading")
-    if (gqlerror2) console.log("error")
-    else {
-      console.log('query bids test')
-      console.log(data2)
-  }
-  }
+  // const queryResultBids = () => {
+  //   if (loading2) console.log("loading")
+  //   if (gqlerror2) console.log("error")
+  //   else {
+  //     console.log('query bids test')
+  //     console.log(data2)
+  // }
+  // }
   
   //setting dai balance at bottom left
   const [daibalance, setDaiBalance] = useState(["  loading balance..."]);
@@ -308,7 +308,7 @@ function App() {
                     <Card>
                     {/* <TextileTest /> */}
                       <div className="cardDiv">
-                      <Button onClick = {queryResultBids} size="sm">Update Bidders List (check console)</Button>
+                      {/* <Button onClick = {queryResultBids} size="sm">Update Bidders List (check console)</Button> */}
                         <OpenLawForm 
                           provider ={userProvider} 
                           address={address} 
