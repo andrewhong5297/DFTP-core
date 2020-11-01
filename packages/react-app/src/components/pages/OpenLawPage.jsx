@@ -233,9 +233,11 @@ export const OpenLawForm = (props) => {
         const [timelinesB, budgetsB] = await projectContract.connect(user).loadBidderTerms(bidderAddress)
         const ownerAddress = await user.getAddress()
         const auditorAddress = await user.getAddress() //this needs to change in future
+        console.log(projectContract)
+        const pname = await projectContract.connect(user).projectName()
 
         const created = await client.create(currentThreadID, "FinishedProjects", [{
-            _id: ownerAddress.toString(),
+            _id: pname,
             owner: ownerAddress.toString(),
             bidder: bidderAddress.toString(),
             auditor: auditorAddress.toString(),

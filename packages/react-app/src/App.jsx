@@ -114,6 +114,8 @@ function App() {
     userProvider
   );
 
+  //OL factory address: 0xDe866932D277DB5B5d8c22c4f429d8045e6d4F82
+
   //update after project name search
   const [error, setError] = useState()
   const [projectNotConnected, setConnection] = useState(true);

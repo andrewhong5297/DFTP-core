@@ -13,7 +13,7 @@ type Bids @entity {
   id: ID!
   project: Project!
   bidderAddress: ID!
-  bidDate: String!
+  bidDate: Int!
   timelines: [BigInt!]
   budgets: [BigInt!]
 }

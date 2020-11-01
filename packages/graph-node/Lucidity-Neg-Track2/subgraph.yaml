@@ -8,7 +8,7 @@ dataSources:
     name: ProjectTrackerFactory
     network: mainnet
     source:
-      address: "0x83Fbd04ccce2AeDd94E8e9783De26FE5D5D8a26B"
+      address: "0xDe866932D277DB5B5d8c22c4f429d8045e6d4F82"
       abi: ProjectTrackerFactory
       startBlock: 1
     mapping:
