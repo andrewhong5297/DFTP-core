@@ -1,8 +1,8 @@
-import React, { useState, Component } from 'react';
+import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { ethers } from "ethers";
-import { Button, Container, Row, Col, Card, Dropdown, Alert } from "react-bootstrap"
-import { createUserAuth, Client, PrivateKey, ThreadID, UserAuth, QueryJSON} from '@textile/hub'
+import { Container, Row, Dropdown } from "react-bootstrap"
+import { createUserAuth, Client, ThreadID} from '@textile/hub'
 
 import "../../App.css";
 const { abi: abiOLF } = require("../../abis/ProjectTrackerFactory.json");
@@ -23,7 +23,7 @@ export const OpenLawForm = (props) => {
     let project, projectContract, projectName; //assigned in pullupform
 
     let OpenLawFactory = new ethers.Contract(
-        "0xDe866932D277DB5B5d8c22c4f429d8045e6d4F82", //insert new project deployed address
+        props.OLFaddress, //insert new project deployed address
         abiOLF,
         props.userProvider
     );

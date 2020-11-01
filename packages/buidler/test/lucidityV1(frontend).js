@@ -71,5 +71,130 @@ describe("Lucidity Frontend Contract and Faucet Setup", function () {
     console.log("tokenfactory address: ", TokenFactory.address);
     console.log("holderfactory address: ", HolderFactory.address);
     console.log("openlawneg address: ", OpenLawFactory.address);
+
+
+    /*everything here down is for making addresses consistent across the repo*/
+    const all_addresses = `
+    export const address_data =
+    {
+        "daiAddress" : "${Dai.address}", 
+        "CTAddress" : "${CT.address}", 
+        "HFAddress" : "${HolderFactory.address}",
+        "TFAddress" : "${TokenFactory.address}",
+        "OLFAddress" : "${OpenLawFactory.address}"
+    }
+    `
+    //write to react-app
+    fs.writeFile('../react-app/src/all_addresses.js',all_addresses, (err) => {
+      // throws an error, you could also catch it here
+      if (err) throw err;
+    });
+    
+    const funderGraph = `
+    specVersion: 0.0.2
+    description: SecurityToken for Ethereum
+    repository: https://github.com/andrewhong5297/Lucidity-Funder-Tracking
+    schema:
+      file: ./schema.graphql
+    dataSources:
+      - kind: ethereum/contract
+        name: TokenFactory
+        network: mainnet
+        source:
+          address: "${TokenFactory.address}"
+          abi: TokenFactory
+          startBlock: 1
+        mapping:
+          kind: ethereum/events
+          apiVersion: 0.0.4
+          language: wasm/assemblyscript
+          entities:
+            - TokenFactory
+          abis:
+            - name: TokenFactory
+              file: ./abis/TokenFactory.json
+          eventHandlers:
+            - event: NewProject(string,string,address,address,address,address)
+              handler: handleNewProject
+          file: ./src/mapping.ts
+    templates:
+      - kind: ethereum/contract
+        name: SecurityToken
+        network: mainnet
+        source:
+          abi: SecurityToken
+        mapping:
+          kind: ethereum/events
+          apiVersion: 0.0.4
+          language: wasm/assemblyscript
+          entities:
+            - FundingToken
+          abis:
+            - name: SecurityToken
+              file: ./abis/SecurityToken.json
+          eventHandlers:
+            - event: newFunder(uint256,address,uint256,uint256)
+              handler: handleNewFunding
+          file: ./src/mapping.ts
+          `
+    //write to funder subgraph
+    fs.writeFile('../graph-node/lucidity-funder-tracker/subgraph.yaml',funderGraph, (err) => {
+      // throws an error, you could also catch it here
+      if (err) throw err;
+    });
+
+    const negGraph = `
+    specVersion: 0.0.2
+    description: SecurityToken for Ethereum
+    repository: https://github.com/andrewhong5297/Lucidity-Neg-Tracking
+    schema:
+      file: ./schema.graphql
+    dataSources:
+      - kind: ethereum/contract
+        name: ProjectTrackerFactory
+        network: mainnet
+        source:
+          address: "${OpenLawFactory.address}"
+          abi: ProjectTrackerFactory
+          startBlock: 1
+        mapping:
+          kind: ethereum/events
+          apiVersion: 0.0.4
+          language: wasm/assemblyscript
+          entities:
+            - Project
+          abis:
+            - name: ProjectTrackerFactory
+              file: ./abis/ProjectTrackerFactory.json
+          eventHandlers:
+            - event: NewProject(string,address,address,uint256[],uint256[],string)
+              handler: handleNewProject
+          file: ./src/mapping.ts
+    templates:
+      - kind: ethereum/contract
+        name: ProjectNegotiationTracker
+        network: mainnet
+        source:
+          abi: ProjectNegotiationTracker
+        mapping:
+          kind: ethereum/events
+          apiVersion: 0.0.4
+          language: wasm/assemblyscript
+          entities:
+            - Bids
+          abis:
+            - name: ProjectNegotiationTracker
+              file: ./abis/ProjectNegotiationTracker.json
+          eventHandlers:
+            - event: newBidSent(address,uint256[],uint256[])
+              handler: handleNewBid
+          file: ./src/mapping.ts
+    `
+
+    //write to neg subgraph
+    fs.writeFile('../graph-node/lucidity-neg-track2/subgraph.yaml',negGraph, (err) => {
+      // throws an error, you could also catch it here
+      if (err) throw err;
+    });
   });
 });
