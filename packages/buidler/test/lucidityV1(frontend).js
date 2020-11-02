@@ -1,9 +1,6 @@
 const { ethers } = require("@nomiclabs/buidler");
 const { use, expect } = require("chai");
 const { solidity } = require("ethereum-waffle");
-const { abi: abiToken } = require("../artifacts/SecurityToken.json");
-const { abi: abiEscrow } = require("../artifacts/HolderContract.json");
-const { abi: abiCT } = require("../artifacts/ConditionalTokens.json");
 const fs = require("fs");
 use(solidity);
 
