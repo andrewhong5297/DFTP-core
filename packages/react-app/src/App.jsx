@@ -31,6 +31,7 @@ import { OpenLawForm } from "./components/pages/OpenLawPage";
 import ProjectForm from "./components/pages/OpenLawForm/ProjectForm";
 //import { TextileTest } from "./components/pages/textileInteractionsTest";
 import { GET_FUNDERS, GET_BIDS } from "./graphql/subgraph";
+import { address_data } from "./all_addresses"
 
 const { abi: abiToken } = require("./abis/SecurityToken.json");
 const { abi: abiEscrow } = require("./abis/HolderContract.json");
@@ -86,28 +87,31 @@ function App() {
 
   //initial contract links
   let Dai = new ethers.Contract(
-    "0x5D49B56C954D11249F59f03287619bE5c6174879",
+    address_data.daiAddress,
     abiDai,
     userProvider
   );
 
   let CT = new ethers.Contract(
-    "0xaB2d7Ca5361B1f8E944543063d63098589bdcD1B",
+    address_data.CTAddress,
     abiCT,
     userProvider
   );
 
   let HolderFactory = new ethers.Contract(
-    "0x057F0ea335ADBeF55e66F9ddeE98Bc53D45dFFD1",
+    address_data.HFAddress,
     abiEscrowF,
     userProvider
   );
 
   let TokenFactory = new ethers.Contract(
-    "0x83Fbd04ccce2AeDd94E8e9783De26FE5D5D8a26B",
+    address_data.TFAddress,
     abiTokenF,
     userProvider
   );
+
+  const OLFaddress = address_data.OLFAddress;
+  //OL factory address: 0xDe866932D277DB5B5d8c22c4f429d8045e6d4F82
 
   //update after project name search
   const [error, setError] = useState()
@@ -299,6 +303,7 @@ function App() {
                           provider={userProvider}
                           TokenFactory={TokenFactory}
                           HolderFactory={HolderFactory}
+                          OLFaddress={OLFaddress}
                           CT={CT}
                           Dai={Dai} />
                       </div>

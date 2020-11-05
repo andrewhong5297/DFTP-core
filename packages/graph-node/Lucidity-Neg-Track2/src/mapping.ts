@@ -19,7 +19,7 @@ export function handleNewProject(event: NewProject): void {
   newProjectBids.create(event.params.project) //tracks based on address
 }
 
-export function handleNewFunding(event: newBidSent): void {
+export function handleNewBid(event: newBidSent): void {
   //we need to connect it here
   let projectID = event.address.toHexString() //should be called from project address?
   let project = Project.load(projectID)
@@ -27,7 +27,7 @@ export function handleNewFunding(event: newBidSent): void {
   let newBid = new Bids(event.params.Bidder.toHex())
   log.info("New bidder at address: {}", [event.params.Bidder.toHex()])
   newBid.bidderAddress = event.params.Bidder.toHex()
-  newBid.bidDate = "date here later" //new Date().toLocaleString('en-GB', { timeZone: 'UTC' })
+  newBid.bidDate = event.block.timestamp.toI32()
   newBid.project = project.id
   newBid.budgets = event.params.budgets
   newBid.timelines = event.params.timelines

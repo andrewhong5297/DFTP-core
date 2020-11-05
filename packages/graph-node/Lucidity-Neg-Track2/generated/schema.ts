@@ -184,13 +184,13 @@ export class Bids extends Entity {
     this.set("bidderAddress", Value.fromString(value));
   }
 
-  get bidDate(): string {
+  get bidDate(): i32 {
     let value = this.get("bidDate");
-    return value.toString();
+    return value.toI32();
   }
 
-  set bidDate(value: string) {
-    this.set("bidDate", Value.fromString(value));
+  set bidDate(value: i32) {
+    this.set("bidDate", Value.fromI32(value));
   }
 
   get timelines(): Array<BigInt> | null {

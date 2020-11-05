@@ -23,7 +23,7 @@ export const OpenLawForm = (props) => {
     let project, projectContract, projectName; //assigned in pullupform
 
     let OpenLawFactory = new ethers.Contract(
-        "0xDe866932D277DB5B5d8c22c4f429d8045e6d4F82", //insert new project deployed address
+        props.OLFaddress, //insert new project deployed address
         abiOLF,
         props.userProvider
     );
@@ -233,9 +233,11 @@ export const OpenLawForm = (props) => {
         const [timelinesB, budgetsB] = await projectContract.connect(user).loadBidderTerms(bidderAddress)
         const ownerAddress = await user.getAddress()
         const auditorAddress = await user.getAddress() //this needs to change in future
+        console.log(projectContract)
+        const pname = await projectContract.connect(user).projectName()
 
         const created = await client.create(currentThreadID, "FinishedProjects", [{
-            _id: ownerAddress.toString(),
+            _id: pname,
             owner: ownerAddress.toString(),
             bidder: bidderAddress.toString(),
             auditor: auditorAddress.toString(),
