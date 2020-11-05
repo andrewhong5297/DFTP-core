@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 import { INFURA_ID, ETHERSCAN_KEY } from "./constants";
 // blockchain libs
 import WalletConnectProvider from "@walletconnect/web3-provider";
@@ -12,7 +12,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 // common libs
 import { Header, Account, Body } from "./components";
-import { useExchangePrice,  useUserProvider} from "./hooks";
+import { useExchangePrice, useUserProvider } from "./hooks";
 // assets
 import "antd/dist/antd.css";
 import "./App.css";
@@ -28,6 +28,7 @@ import { OwnerPage } from "./components/pages/OwnerPage";
 import { AuditorPage } from "./components/pages/AuditorPage";
 import { BidderPage } from "./components/pages/BidderPage";
 import { OpenLawForm } from "./components/pages/OpenLawPage";
+import ProjectForm from "./components/pages/OpenLawForm/ProjectForm";
 //import { TextileTest } from "./components/pages/textileInteractionsTest";
 import { GET_FUNDERS, GET_BIDS } from "./graphql/subgraph";
 
@@ -83,12 +84,6 @@ function App() {
     }
   }, [loadWeb3Modal]);
 
-  // const [route, setRoute] = useState();
-  // useEffect(() => {
-  //   console.log("SETTING ROUTE", window.location.pathname)
-  //   setRoute(window.location.pathname)
-  // }, [window.location.pathname]);
-    
   //initial contract links
   let Dai = new ethers.Contract(
     "0x5D49B56C954D11249F59f03287619bE5c6174879",
@@ -124,7 +119,7 @@ function App() {
   const [Project, setProject] = useState(null);
   const updateContracts = async (formData) => {
     console.log("searching project name: ", formData.value)
-    
+
     try {
       const escrow = await HolderFactory.getHolder(formData.value);
       const project = await TokenFactory.getProject(formData.value);
@@ -134,7 +129,7 @@ function App() {
         abiEscrow,
         userProvider
       ))
-  
+
       setProject(await new ethers.Contract(
         project.projectAddress,
         abiToken,
@@ -144,85 +139,68 @@ function App() {
       setConnection(false) //enables buttons
       setProjectName(formData.value)
       setError(
-      <Alert variant="success" onClose={() => setError(null)} dismissible>
+        <Alert variant="success" onClose={() => setError(null)} dismissible>
           <Alert.Heading>Link Worked</Alert.Heading>
           <p>
-          Project and escrow have been linked, feel free to continue
+            Project and escrow have been linked, feel free to continue
           </p>
-      </Alert>)
+        </Alert>)
     }
-    catch(e) {
+    catch (e) {
       console.error(e)
       setError(
-              <Alert variant="danger" onClose={() => setError(null)} dismissible>
-                  <Alert.Heading>Link Error</Alert.Heading>
-                  <p>
-                  Looks like that didn't go through - make sure you spelled the name of the project correctly.
+        <Alert variant="danger" onClose={() => setError(null)} dismissible>
+          <Alert.Heading>Link Error</Alert.Heading>
+          <p>
+            Looks like that didn't go through - make sure you spelled the name of the project correctly.
                   </p>
-              </Alert>
-          ) 
-      }
+        </Alert>
+      )
     }
+  }
 
-  //theGraph API requests (currently passing client is failing)
-  // const client_funders = new ApolloClient({
-  //   uri: "http://127.0.0.1:8000/subgraphs/name/andrewhong5297/Lucidity-Funder-Tracking" //"https://api.thegraph.com/subgraphs/name/andrewhong5297/lucidity-funder-tracking",
-  // });
-  
-  // const client_bidders = new ApolloClient({
-  //   uri: "http://127.0.0.1:8000/subgraphs/name/andrewhong5297/Lucidity-Neg-Tracking" //"https://api.thegraph.com/subgraphs/name/andrewhong5297/lucidity-funder-tracking",
-  // });
-  
-  const { loading, gqlerror, data } = useQuery(GET_FUNDERS, { variables: {projectName: ProjectName}}) // options: () => ({client: client_funders})});
+  const { loading, gqlerror, data } = useQuery(GET_FUNDERS, { variables: { projectName: ProjectName } }) // options: () => ({client: client_funders})});
   //const { loading2, gqlerror2, data2 } = useQuery(GET_BIDS, { variables: {projectName: ProjectName}}) //options: () => ({client: client_bidders})});
-  const [ funderList, setList ] = useState("No funders yet, be the first one!")
+  const [funderList, setList] = useState("No funders yet, be the first one!")
   const queryResult = () => {
     if (loading) console.log("loading")
     if (gqlerror) console.log("error")
     else {
       console.log(ProjectName)
-        //https://www.apollographql.com/docs/react/get-started/
-        setList(
-          <div>
-               <br></br>
-               <h5>Project Address: {data.projects[0].projectAddress}</h5>
-               <br></br>
-                <Table striped bordered hover>
-                <thead>
-                    <tr>
-                    <th>Token Id</th>
-                    <th>Owner Address:</th>
-                    <th>Funded Amount</th>
-                    <th>Funded Tenor</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {data.projects[0].fundingTokens.map(function({ id, owner, fundingvalue, tenor}) {
-                  console.log("was called")
-                    return(
-                    <tr>
+      //https://www.apollographql.com/docs/react/get-started/
+      setList(
+        <div>
+          <br></br>
+          <h5>Project Address: {data.projects[0].projectAddress}</h5>
+          <br></br>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>Token Id</th>
+                <th>Owner Address:</th>
+                <th>Funded Amount</th>
+                <th>Funded Tenor</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.projects[0].fundingTokens.map(function ({ id, owner, fundingvalue, tenor }) {
+                console.log("was called")
+                return (
+                  <tr>
                     <td>{id}</td>
                     <td>{owner}</td>
                     <td>{fundingvalue.toString()}</td>
                     <td>{tenor.toString()}</td>
-                    </tr>
-                    )
-                })}
-                </tbody>
-                </Table>
-            </div>
-        )
+                  </tr>
+                )
+              })}
+            </tbody>
+          </Table>
+        </div>
+      )
     }
   }
-  // const queryResultBids = () => {
-  //   if (loading2) console.log("loading")
-  //   if (gqlerror2) console.log("error")
-  //   else {
-  //     console.log('query bids test')
-  //     console.log(data2)
-  // }
-  // }
-  
+
   //setting dai balance at bottom left
   const [daibalance, setDaiBalance] = useState(["  loading balance..."]);
   const updateDaiBalance = async () => {
@@ -232,51 +210,51 @@ function App() {
   }
 
   //openlaw link
-  const link = <a href="https://lib.openlaw.io/web/default/template/LucidityRFP"> fill out RFP first</a>;   
+  const link = <a href="https://lib.openlaw.io/web/default/template/LucidityRFP"> fill out RFP first</a>;
 
   //roles dropdown
   const [PageState, setPage] = useState([<HomePage />])
   const [RoleState, setRole] = useState("Owner")
-  const handleSelect=(e)=>{
+  const handleSelect = (e) => {
     console.log(`${e} has been selected`);
-    if (e=="FunderPage") {
-      setPage(<FunderPage 
-        address={address} 
-        provider ={userProvider} 
-        escrow = {Escrow}
-        Project = {Project}
-        Dai = {Dai}/>)
+    if (e == "FunderPage") {
+      setPage(<FunderPage
+        address={address}
+        provider={userProvider}
+        escrow={Escrow}
+        Project={Project}
+        Dai={Dai} />)
       setRole("Funder")
     }
-    if (e=="BidderPage") {
-      setPage(<BidderPage 
-        address={address} 
-        provider ={userProvider} 
-        escrow = {Escrow}
-        Project = {Project}
-        Dai = {Dai}
-        CT={CT}/>)
+    if (e == "BidderPage") {
+      setPage(<BidderPage
+        address={address}
+        provider={userProvider}
+        escrow={Escrow}
+        Project={Project}
+        Dai={Dai}
+        CT={CT} />)
       setRole("Bidder")
     }
-    if (e=="AuditorPage") {
-      setPage(<AuditorPage 
-        address={address} 
-        provider ={userProvider} 
-        escrow = {Escrow}
-        Project = {Project}
-        Dai = {Dai}
-        CT={CT}/>)
+    if (e == "AuditorPage") {
+      setPage(<AuditorPage
+        address={address}
+        provider={userProvider}
+        escrow={Escrow}
+        Project={Project}
+        Dai={Dai}
+        CT={CT} />)
       setRole("Auditor")
     }
-    if (e=="OwnerPage") {
-      setPage(<OwnerPage 
-        address={address} 
-        provider ={userProvider} 
-        escrow = {Escrow}
-        Project = {Project}
-        Dai = {Dai}
+    if (e == "OwnerPage") {
+      setPage(<OwnerPage
+        address={address}
+        provider={userProvider}
+        escrow={Escrow}
+        Project={Project}
+        Dai={Dai}
         CT={CT}
-        />)
+      />)
       setRole("Owner")
     }
   }
@@ -304,70 +282,79 @@ function App() {
             <Route exact path="/">
               <Container fluid="md">
                 <Row className="mt-1">
-                    <Col>
+                  <Col>
+                    {/* Breadcrumb + Action Bar */}
+                    <Row className="mt-4 justify-content-end">
+                      <Link to="/projects/new">
+                        <Button>New Project</Button>
+                      </Link>
+                    </Row>
                     <Card>
-                    {/* <TextileTest /> */}
+                      {/* <TextileTest /> */}
                       <div className="cardDiv">
-                      {/* <Button onClick = {queryResultBids} size="sm">Update Bidders List (check console)</Button> */}
-                        <OpenLawForm 
-                          provider ={userProvider} 
-                          address={address} 
-                          provider ={userProvider} 
-                          TokenFactory = {TokenFactory}
-                          HolderFactory = {HolderFactory}
-                          CT = {CT}
-                          Dai = {Dai}/>
+                        {/* <Button onClick = {queryResultBids} size="sm">Update Bidders List (check console)</Button> */}
+                        <OpenLawForm
+                          provider={userProvider}
+                          address={address}
+                          provider={userProvider}
+                          TokenFactory={TokenFactory}
+                          HolderFactory={HolderFactory}
+                          CT={CT}
+                          Dai={Dai} />
                       </div>
                     </Card>
                     <Card>
                       <div className="cardDiv">
                         <h6 className="mt-1">Please {link} or fill out form above for new projects; otherwise search for project name below:</h6>
-                          <form onSubmit={handleSubmit(updateContracts)} className="">
-                            <div className="input-group mb-3">
-                                <div className="input-group-append col-centered">
-                                  <label>
-                                  <input type="text" name="value" ref={register} className="form-control" placeholder="Honduras Agriculture Project" aria-describedby="button-addon2" />
-                                  </label>
-                                  <div><button className="btn col-centeredbtn btn-outline-secondary" type="submit" value="submit" id="button-addon2">Connect to Project</button></div>
-                                </div>
-                              </div>
+                        <form onSubmit={handleSubmit(updateContracts)} className="">
+                          <div className="input-group mb-3">
+                            <div className="input-group-append col-centered">
+                              <label>
+                                <input type="text" name="value" ref={register} className="form-control" placeholder="Honduras Agriculture Project" aria-describedby="button-addon2" />
+                              </label>
+                              <div><button className="btn col-centeredbtn btn-outline-secondary" type="submit" value="submit" id="button-addon2">Connect to Project</button></div>
+                            </div>
+                          </div>
                         </form>
                         {error}
-                        </div>
-                      </Card>
-                      <Card className="mt-1">
-                        <div className="cardDiv">
-                            <Dropdown onSelect={handleSelect}>
-                              <Dropdown.Toggle variant="primary" id="dropdown-basic" size="md" disabled={projectNotConnected}>
-                                Roles
+                      </div>
+                    </Card>
+                    <Card className="mt-1">
+                      <div className="cardDiv">
+                        <Dropdown onSelect={handleSelect}>
+                          <Dropdown.Toggle variant="primary" id="dropdown-basic" size="md" disabled={projectNotConnected}>
+                            Roles
                               </Dropdown.Toggle>
 
-                              <Dropdown.Menu>
-                                <Dropdown.Item eventKey="OwnerPage">Owner</Dropdown.Item>
-                                <Dropdown.Item eventKey="FunderPage">Funder</Dropdown.Item>
-                                <Dropdown.Item eventKey="AuditorPage">Auditor</Dropdown.Item>
-                                <Dropdown.Item eventKey="BidderPage">Bidder</Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                            <br></br>
-                            {PageState}
-                        </div>
-                      </Card>
-                      <Card className="mt-1">
-                    <div className="cardDiv"><h6>List of all funders for selected project:</h6>
-                        <Button onClick = {queryResult} disabled = {projectNotConnected} size="sm">Update Funders List</Button>
+                          <Dropdown.Menu>
+                            <Dropdown.Item eventKey="OwnerPage">Owner</Dropdown.Item>
+                            <Dropdown.Item eventKey="FunderPage">Funder</Dropdown.Item>
+                            <Dropdown.Item eventKey="AuditorPage">Auditor</Dropdown.Item>
+                            <Dropdown.Item eventKey="BidderPage">Bidder</Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                        <br></br>
+                        {PageState}
+                      </div>
+                    </Card>
+                    <Card className="mt-1">
+                      <div className="cardDiv"><h6>List of all funders for selected project:</h6>
+                        <Button onClick={queryResult} disabled={projectNotConnected} size="sm">Update Funders List</Button>
                         <div>
                           {funderList}
                         </div>
-                     </div>
+                      </div>
                     </Card>
                   </Col>
                 </Row>
               </Container>
-                <div className="fixed-bottom">
-                  <Button onClick = {updateDaiBalance} size="sm">Update Dai Balance</Button>
-                  {daibalance}
-                </div>
+              <div className="fixed-bottom">
+                <Button onClick={updateDaiBalance} size="sm">Update Dai Balance</Button>
+                {daibalance}
+              </div>
+            </Route>
+            <Route exact path="/projects/new">
+              <ProjectForm />
             </Route>
           </Switch>
         </BrowserRouter>

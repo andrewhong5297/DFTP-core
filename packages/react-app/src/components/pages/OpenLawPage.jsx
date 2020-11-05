@@ -1,8 +1,8 @@
-import React, { useState, Component } from 'react';
+import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { ethers } from "ethers";
-import { Button, Container, Row, Col, Card, Dropdown, Alert } from "react-bootstrap"
-import { createUserAuth, Client, PrivateKey, ThreadID, UserAuth, QueryJSON} from '@textile/hub'
+import { Container, Row, Dropdown } from "react-bootstrap"
+import { createUserAuth, Client, ThreadID } from '@textile/hub'
 
 import "../../App.css";
 const { abi: abiOLF } = require("../../abis/ProjectTrackerFactory.json");
@@ -217,9 +217,9 @@ export const OpenLawForm = (props) => {
         //textile stuff
         const expiration = new Date(Date.now() + 60 * 1000)
         console.log(createUserAuth)
-        const userAuth = await createUserAuth("b4ubw5kjw4bnetzbld4zfqmbhaq", 
-                                        "bnlre4or4klaezixde3izvgotxbgluxlprywsrvi", 
-                                        expiration)
+        const userAuth = await createUserAuth("b4ubw5kjw4bnetzbld4zfqmbhaq",
+            "bnlre4or4klaezixde3izvgotxbgluxlprywsrvi",
+            expiration)
         console.log(userAuth)
         const client = await Client.withUserAuth(userAuth)
 
@@ -242,7 +242,7 @@ export const OpenLawForm = (props) => {
             milestones: milestones,
             budgets: [budgetsB[0].toString(), budgetsB[1].toString(), budgetsB[2].toString()],
             timeline: [timelinesB[0].toString(), timelinesB[1].toString(), timelinesB[2].toString()]
-          }])
+        }])
 
         console.log(created)
 
@@ -276,12 +276,12 @@ export const OpenLawForm = (props) => {
 
         await firstProjectContract.connect(user).setHolder(
             escrow.projectAddress);
-            changeForm(
-                <div>
-                    All set, good luck!
+        changeForm(
+            <div>
+                All set, good luck!
                 </div>
-            )
-        }
+        )
+    }
     return (
         <div>
             <Container>
